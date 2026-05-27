@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-deep: #080808;
+  --bg-panel: #0F0F0F;
+  --bg-raised: #141414;
+  --border: #1C1C1C;
+  --border-lit: #2A2A2A;
+  --amber: #E8A045;
+  --amber-dim: #A0621A;
+  --green-tc: #3DBA6F;
+  --text-primary: #E8E8E8;
+  --text-muted: #555555;
+  --text-dim: #333333;
+}
+
+* {
+  box-sizing: border-box;
+  cursor: none !important;
+  border-radius: 0 !important;
+}
+
+body {
+  color: var(--text-primary);
+  background: var(--bg-deep);
+  overflow-x: hidden;
+  user-select: none;
+}
+
+/* Scanline effect */
+.scanlines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.3) 2px,
+    rgba(0, 0, 0, 0.3) 4px
+  );
+  opacity: 0.15;
+}
+
+/* Scrollbar customization to look like NLE */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-deep);
+  border-left: 1px solid var(--border);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-lit);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+::-webkit-scrollbar-corner {
+  background: var(--bg-deep);
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
