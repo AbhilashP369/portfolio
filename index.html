@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ABHILASH P | Video Editor & Motion Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;1,9..40,300&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep:      #080808;
+      --bg-panel:     #0F0F0F;
+      --bg-raised:    #141414;
+      --border:       #1C1C1C;
+      --border-lit:   #2A2A2A;
+      --amber:        #E8A045;
+      --amber-dim:    #A0621A;
+      --green-tc:     #3DBA6F;
+      --text-primary: #E8E8E8;
+      --text-muted:   #555555;
+      --text-dim:     #333333;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      border-radius: 0 !important;
+      cursor: default;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-deep);
+      color: var(--text-primary);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+      padding-top: 30px;
+      padding-bottom: 22px;
+    }
+
+    ::-webkit-scrollbar {
+      width: 3px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-lit);
+    }
+
+    .film-grain {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.03;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    /* TYPOGRAPHY UTILS */
+    .font-bebas { font-family: 'Bebas Neue', cursive; font-weight: 400; letter-spacing: normal; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; }
+    
+    /* GLOBAL CHROME */
+    #top-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 30px;
+      background: var(--bg-deep);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 16px;
+    }
+
+    #bottom-bar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 22px;
+      background: var(--bg-deep);
+      border-top: 1px solid var(--border);
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 16px;
+    }
+
+    /* BLINK ANIMATION */
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    .rec-blink { animation: blink 1.2s infinite; }
+
+    /* LAYOUT UTILS */
+    .section-container {
+      width: 100%;
+      min-height: calc(100vh - 52px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+    }
+    .panel-header {
+      height: 24px;
+      background: var(--bg-deep);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      color: var(--amber);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    /* SECTION 1 - HERO */
+    #hero {
+      flex-direction: row;
+      height: calc(100vh - 52px);
+    }
+    .hero-panel {
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .hero-panel:last-child { border-right: none; }
+    
+    /* Hero Left */
+    #hero-left { width: 22%; background: var(--bg-panel); }
+    .waveform-preview {
+      flex: 1; background: #0A0A0A; position: relative; overflow: hidden;
+      display: flex; align-items: center; gap: 2px; padding: 0 10%;
+    }
+    .wf-bar {
+      flex: 1; background: var(--amber); opacity: 0.6;
+      animation: pulse 2s infinite alternate ease-in-out;
+    }
+    @keyframes pulse { 0% { transform: scaleY(0.8); opacity: 0.4; } 100% { transform: scaleY(1.2); opacity: 0.8; } }
+
+    /* Hero Center */
+    #hero-center { width: 56%; background: var(--bg-panel); }
+    .monitor-canvas {
+      flex: 1; position: relative; background: #0A0A0A; overflow: hidden;
+      animation: driftBg 20s infinite alternate;
+    }
+    @keyframes driftBg { 0% { background: #080808; } 50% { background: #0D0D0D; } 100% { background: #060606; } }
+    
+    .corner-bracket { position: absolute; width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.1); }
+    .cb-tl { top: 20px; left: 20px; border-right: none; border-bottom: none; }
+    .cb-tr { top: 20px; right: 20px; border-left: none; border-bottom: none; }
+    .cb-bl { bottom: 20px; left: 20px; border-right: none; border-top: none; }
+    .cb-br { bottom: 20px; right: 20px; border-left: none; border-top: none; }
+    
+    .safe-area { position: absolute; border: 1px dashed rgba(255,255,255,0.04); pointer-events: none; }
+    .sa-outer { top: 4%; bottom: 4%; left: 4%; right: 4%; }
+    .sa-inner { top: 10%; bottom: 10%; left: 10%; right: 10%; }
+    
+    .vignette { position: absolute; inset: 0; background: radial-gradient(circle, transparent 0%, rgba(0,0,0,0.7) 100%); pointer-events: none; }
+
+    .ken-burns-text {
+      animation: kenburns 8s infinite alternate ease-in-out;
+    }
+    @keyframes kenburns { 0% { transform: scale(1); } 100% { transform: scale(1.025); } }
+
+    .transport-bar { height: 18px; background: #0A0A0A; border-top: 1px solid var(--border); display: flex; justify-content: center; align-items: center; gap: 16px; }
+    .transport-btn { display: flex; align-items: center; color: var(--text-muted); opacity: 0.6; }
+
+    /* Hero Right */
+    #hero-right { width: 22%; background: var(--bg-panel); }
+    .file-tree { padding: 12px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); }
+    .ft-row { display: flex; align-items: center; padding: 4px 0; gap: 6px; cursor: pointer; transition: background 0.2s; }
+    .ft-row:hover { background: #1A1A1A; }
+    .ft-row.active { border-left: 2px solid var(--amber); padding-left: 4px; color: var(--text-primary); }
+    .ft-dot { width: 6px; height: 6px; background: var(--green-tc); border-radius: 50% !important; margin-left: auto; }
+
+    /* SECTION 2 - ABOUT */
+    #about { display: flex; flex-direction: row; }
+    #about-left { width: 30%; border-right: 1px solid var(--border); background: var(--bg-panel); }
+    #about-right { width: 70%; background: var(--bg-deep); padding: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    
+    .clip-card {
+      background: #0F0F0F; border: 1px solid var(--border); position: relative;
+      padding: 16px; display: flex; flex-direction: column; gap: 12px;
+      transition: border-color 0.2s;
+      min-height: 140px;
+    }
+    .clip-card:hover { border-color: var(--amber); }
+    .card-accent { position: absolute; top: 0; left: 0; width: 10px; height: 10px; border-top: 2px solid var(--amber); border-left: 2px solid var(--amber); }
+    .dur-badge { position: absolute; bottom: 8px; right: 8px; color: var(--amber); font-family: 'JetBrains Mono'; font-size: 9px; }
+
+    /* SECTION 3 - SKILLS (TIMELINE) */
+    #skills { background: var(--bg-panel); overflow: hidden; }
+    .ruler { height: 28px; background: #0A0A0A; border-bottom: 1px solid var(--border); position: relative; }
+    .ruler-tick { position: absolute; bottom: 0; width: 1px; background: var(--text-muted); }
+    .ruler-label { position: absolute; top: 2px; font-family: 'JetBrains Mono'; font-size: 9px; color: var(--text-muted); transform: translateX(-50%); }
+    
+    .track-row { display: flex; height: 36px; border-bottom: 1px solid var(--border); }
+    .track-label { width: 80px; border-right: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 8px; }
+    .track-area { flex: 1; position: relative; background: var(--bg-deep); display: flex; align-items: center; }
+    
+    .clip-block {
+      height: 28px; position: absolute;
+      display: flex; align-items: center; padding: 0 8px;
+      color: var(--amber); font-family: 'JetBrains Mono'; font-size: 10px; overflow: hidden;
+      transition: transform 0.2s;
+      background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255,255,255,0.02) 4px, rgba(255,255,255,0.02) 5px);
+      width: 0; /* for animation */
+    }
+    .clip-block:hover { transform: scale(1.01); border-top: 1px solid var(--amber); z-index: 10; }
+    
+    .playhead {
+      position: absolute; top: 0; bottom: 0; width: 1px; background: var(--amber); z-index: 50;
+      transform: translateX(0); transition: transform 0.1s linear;
+    }
+    .playhead::before {
+      content: ''; position: absolute; top: 0; left: -5px;
+      border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 6px solid var(--amber);
+    }
+
+    .audio-waveform {
+      position: absolute; inset: 0; display: flex; align-items: center; gap: 1px; padding: 0 4px;
+    }
+    .audio-bar { flex: 1; background: var(--amber); opacity: 0.4; }
+
+    /* SECTION 4 - TOOLS */
+    #tools { background: var(--bg-deep); padding: 16px; }
+    .effect-group { border-bottom: 1px solid #1A1A1A; margin-bottom: 8px; }
+    .effect-header { display: flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono'; font-size: 10px; color: var(--amber); padding: 6px 0; }
+    .effect-prop { display: flex; height: 26px; align-items: center; font-family: 'JetBrains Mono'; font-size: 10px; padding-left: 16px; }
+    .effect-prop:hover { background: #151515; }
+    .prop-label { width: 150px; color: var(--text-muted); }
+    .prop-val { color: white; display: flex; align-items: center; gap: 8px; flex: 1; }
+    .progress-track { flex: 1; height: 1px; background: #1C1C1C; position: relative; }
+    .progress-fill { position: absolute; top: 0; left: 0; height: 100%; background: var(--amber); width: 0; transition: width 1.5s ease-out; }
+
+    /* SECTION 5 - EXPERIENCE */
+    #experience { background: var(--bg-panel); }
+    .queue-header { display: flex; border-bottom: 1px solid var(--border-lit); font-family: 'JetBrains Mono'; font-size: 9px; color: var(--text-muted); text-transform: uppercase; padding: 8px 16px; }
+    .queue-row { border-bottom: 1px solid var(--border); background: var(--bg-deep); transition: background 0.2s; position: relative; }
+    .queue-row:hover { background: #111; border-left: 2px solid var(--amber); }
+    .queue-main { display: flex; height: 36px; align-items: center; padding: 0 16px; font-family: 'JetBrains Mono'; font-size: 10px; color: var(--text-primary); cursor: pointer; }
+    .q-col-1 { width: 40px; color: var(--text-muted); }
+    .q-col-2 { width: 250px; }
+    .q-col-3 { width: 120px; }
+    .q-col-4 { width: 120px; color: var(--text-muted); }
+    .q-col-5 { width: 100px; color: var(--text-muted); }
+    .q-col-6 { flex: 1; color: var(--text-muted); text-align: right; }
+    
+    .badge-render { background: rgba(232, 160, 69, 0.15); color: var(--amber); padding: 2px 6px; display: inline-flex; align-items: center; gap: 4px; }
+    .badge-done { background: #1A2A1A; color: var(--green-tc); padding: 2px 6px; display: inline-flex; align-items: center; gap: 4px; }
+    
+    .queue-details { max-height: 0; overflow: hidden; transition: max-height 0.25s ease; padding: 0 16px 0 60px; font-family: 'JetBrains Mono'; font-size: 10px; color: var(--text-muted); }
+    .queue-row:hover .queue-details { max-height: 200px; padding-bottom: 16px; }
+
+    /* SECTION 6 - EDUCATION */
+    #education { background: var(--bg-deep); padding: 16px; }
+    .edu-block { margin-bottom: 16px; }
+    .edu-row { display: flex; height: 28px; align-items: center; border-bottom: 1px solid #141414; font-family: 'JetBrains Mono'; font-size: 10px; }
+    .edu-label { width: 150px; color: var(--text-muted); text-transform: uppercase; }
+    .edu-val { color: var(--text-primary); }
+
+    /* SECTION 7 - CONTACT */
+    #contact { display: flex; flex-direction: row; min-height: 400px; }
+    #contact-left { width: 45%; border-right: 1px solid var(--border); background: #080808; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; padding: 32px; }
+    #contact-right { width: 55%; background: var(--bg-panel); padding: 24px; }
+    
+    .contact-row { display: flex; height: 32px; align-items: center; border-bottom: 1px solid #1A1A1A; font-family: 'JetBrains Mono'; font-size: 10px; text-decoration: none; color: var(--text-primary); border-left: 2px solid transparent; }
+    .contact-row:hover { background: #111111; border-left-color: var(--amber); }
+    .c-label { width: 80px; color: var(--text-muted); padding-left: 8px; }
+
+    .range-bar { width: 80%; height: 2px; background: #222; margin-top: 24px; position: relative; }
+    .range-fill { position: absolute; left: 10%; right: 10%; height: 100%; background: var(--amber); }
+    .range-handle { position: absolute; top: -4px; width: 2px; height: 10px; background: white; }
+
+    /* INITIAL ANIMATIONS */
+    .slide-down { animation: slideDown 0.3s ease forwards; }
+    .slide-up { animation: slideUp 0.3s ease forwards; animation-delay: 0.05s; opacity: 0; }
+    .slide-right { animation: slideRight 0.4s ease forwards; animation-delay: 0.1s; opacity: 0; }
+    .fade-in { animation: fadeIn 0.5s ease forwards; animation-delay: 0.2s; opacity: 0; }
+    .slide-left { animation: slideLeft 0.4s ease forwards; animation-delay: 0.15s; opacity: 0; }
+
+    @keyframes slideDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+    @keyframes slideUp { from { transform: translateY(100%); opacity: 1; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes slideRight { from { transform: translateX(-20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideLeft { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+  </style>
+</head>
+<body>
+
+  <!-- SVG Grain -->
+  <div class="film-grain"></div>
+
+  <!-- TOP BAR -->
+  <div id="top-bar" class="slide-down">
+    <div class="font-mono" style="color: var(--amber);">ABHILASH.P <span style="color: var(--text-muted)">·</span> VIDEO EDITOR</div>
+    <div class="font-mono" style="color: var(--text-muted); display: flex; gap: 24px;">
+      <span>FILE</span><span>EDIT</span><span>CLIP</span><span>SEQUENCE</span><span>EFFECTS</span><span>COLOR</span><span>VIEW</span>
+    </div>
+    <div class="font-mono" style="color: var(--text-muted); display: flex; align-items: center; gap: 8px;">
+      CPU <span id="cpu-meter" style="color: var(--text-primary);">38%</span> · RAM 11.2GB · 
+      <div style="color: #E84545; display: flex; align-items: center; gap: 4px;">
+        <span class="rec-blink" style="width: 8px; height: 8px; background: #E84545; border-radius: 50% !important; display: inline-block;"></span> REC
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO SECTION -->
+  <div id="hero" class="section-container">
+    
+    <!-- Hero Left -->
+    <div id="hero-left" class="hero-panel slide-right">
+      <div class="panel-header" style="justify-content: space-between;">
+        <span>SOURCE</span>
+        <span style="color: var(--text-muted); text-transform: none;">PORTFOLIO_INTRO_V3.mp4</span>
+      </div>
+      <div class="waveform-preview" id="source-waveform">
+        <!-- Bars injected by JS -->
+      </div>
+      <div style="padding: 12px; font-family: 'JetBrains Mono'; font-size: 10px; color: var(--text-muted); display: flex; flex-direction: column; gap: 4px;">
+        <div style="display: flex;"><span style="width: 60px;">CODEC</span><span style="color: var(--text-primary)">ProRes 4444</span></div>
+        <div style="display: flex;"><span style="width: 60px;">RES</span><span style="color: var(--text-primary)">1920 × 1080</span></div>
+        <div style="display: flex;"><span style="width: 60px;">FPS</span><span style="color: var(--text-primary)">23.976</span></div>
+        <div style="display: flex;"><span style="width: 60px;">AUDIO</span><span style="color: var(--text-primary)">48kHz / 24bit</span></div>
+        <div style="display: flex;"><span style="width: 60px;">LOCATION</span><span style="color: var(--text-primary)">Kannur, Kerala</span></div>
+        <div style="display: flex; margin-top: 8px;"><span style="width: 60px;">STATUS</span><span style="color: var(--green-tc)">● AVAILABLE</span></div>
+      </div>
+    </div>
+
+    <!-- Hero Center -->
+    <div id="hero-center" class="hero-panel fade-in">
+      <div class="panel-header">PROGRAM</div>
+      <div class="monitor-canvas">
+        <div class="vignette"></div>
+        <div class="safe-area sa-outer"></div>
+        <div class="safe-area sa-inner"></div>
+        
+        <div class="corner-bracket cb-tl"></div>
+        <div class="corner-bracket cb-tr"></div>
+        <div class="corner-bracket cb-bl"></div>
+        <div class="corner-bracket cb-br"></div>
+        
+        <div style="position: absolute; top: 16px; left: 16px; font-family: 'JetBrains Mono'; font-size: 10px; color: var(--amber);">PROGRAM</div>
+        <div style="position: absolute; bottom: 16px; left: 16px; font-family: 'JetBrains Mono'; font-size: 11px; color: var(--green-tc);" id="hero-timecode">01:00:00:00</div>
+        
+        <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10;">
+          <div class="font-bebas ken-burns-text" style="font-size: 11vw; color: white; letter-spacing: 0.02em; line-height: 0.9;">ABHILASH P</div>
+          <div style="font-size: 13px; color: #888; letter-spacing: 0.3em; text-transform: uppercase; margin-top: 12px; font-weight: 300;">VIDEO EDITOR · MOTION DESIGNER</div>
+          <div style="font-size: 13px; color: var(--amber); font-style: italic; margin-top: 8px;">"Turning Frames Into Emotion"</div>
+        </div>
+      </div>
+      <div class="transport-bar">
+        <div class="transport-btn">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+        </div>
+        <div class="transport-btn">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" transform="rotate(180 12 12)"/></svg>
+        </div>
+        <div class="transport-btn" style="color: var(--text-primary); opacity: 1;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <div class="transport-btn">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero Right -->
+    <div id="hero-right" class="hero-panel slide-left">
+      <div class="panel-header">PROJECT</div>
+      <div class="file-tree">
+        <div class="ft-row"><span style="color:var(--text-dim)">▼</span> ABHILASH_P/</div>
+        <div class="ft-row" style="padding-left: 12px;"><span style="color:var(--text-dim)">▼</span> 01_ABOUT/</div>
+        <div class="ft-row active" style="padding-left: 28px;">biography.txt <div class="ft-dot"></div></div>
+        <div class="ft-row" style="padding-left: 12px;"><span style="color:var(--text-dim)">▼</span> 02_SKILLS/</div>
+        <div class="ft-row" style="padding-left: 28px;">tools.aep <div class="ft-dot"></div></div>
+        <div class="ft-row" style="padding-left: 28px;">capabilities.prproj <div class="ft-dot"></div></div>
+        <div class="ft-row" style="padding-left: 12px;"><span style="color:var(--text-dim)">▼</span> 03_PROJECTS/</div>
+        <div class="ft-row" style="padding-left: 28px;">reels.mp4</div>
+        <div class="ft-row" style="padding-left: 28px;">motion.aep</div>
+        <div class="ft-row" style="padding-left: 28px;">brand_ads.mp4</div>
+        <div class="ft-row" style="padding-left: 12px;"><span style="color:var(--text-dim)">▼</span> 04_EXPERIENCE/</div>
+        <div class="ft-row" style="padding-left: 28px;">freelance_2024.txt <div class="ft-dot"></div></div>
+        <div class="ft-row" style="padding-left: 12px;"><span style="color:var(--text-dim)">▷</span> 05_EDUCATION/</div>
+        <div class="ft-row" style="padding-left: 12px;"><span style="color:var(--text-dim)">▷</span> 06_CONTACT/</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ABOUT SECTION -->
+  <div id="about" class="section-container">
+    <div id="about-left">
+      <div class="panel-header">MEDIA BIN</div>
+      <div class="file-tree">
+        <div class="ft-row"><span style="color:var(--text-dim)">▼</span> ABHILASH_P/</div>
+        <div class="ft-row" style="padding-left: 12px;"><span style="color:var(--text-dim)">▼</span> 01_ABOUT/</div>
+        <div class="ft-row active" style="padding-left: 28px;">biography.txt <div class="ft-dot"></div></div>
+      </div>
+    </div>
+    <div id="about-right">
+      <div class="clip-card" style="border-top: 1px solid var(--border);">
+        <div class="card-accent"></div>
+        <div class="font-mono" style="color: var(--amber);">SUMMARY.txt</div>
+        <div style="font-size: 13px; color: var(--text-primary); line-height: 1.5; font-weight: 300;">Creative-focused MCA graduate. Freelance video editor and graphic designer since 2024. Passionate about cinematic storytelling and visual design.</div>
+        <div class="dur-badge">00:00:42:12</div>
+      </div>
+      <div class="clip-card">
+        <div class="card-accent" style="border-color: var(--amber-dim);"></div>
+        <div class="font-mono" style="color: var(--amber-dim);">BACKGROUND.txt</div>
+        <div style="font-size: 13px; color: var(--text-primary); line-height: 1.5; font-weight: 300;">Academically trained in computer applications. Strong passion in creative fields — actively creating reels, motion graphics, and visual content for social platforms.</div>
+        <div class="dur-badge" style="color: var(--amber-dim);">00:01:15:00</div>
+      </div>
+      <div class="clip-card">
+        <div class="card-accent" style="border-color: var(--green-tc);"></div>
+        <div class="font-mono" style="color: var(--green-tc);">APPROACH.txt</div>
+        <div style="font-size: 13px; color: var(--text-primary); line-height: 1.5; font-weight: 300;">Client-focused. Adapts quickly. Delivers on time. Brings a strong visual sense to every project — from rough cut to final export.</div>
+        <div class="dur-badge" style="color: var(--green-tc);">00:00:58:06</div>
+      </div>
+      <div class="clip-card">
+        <div class="card-accent" style="border-color: #3A7BD5;"></div>
+        <div class="font-mono" style="color: #3A7BD5;">STRENGTHS.txt</div>
+        <div style="font-size: 13px; color: var(--text-primary); line-height: 1.5; font-weight: 300;">Creative mindset · Technical background · Quick learner · Strong visual sense · Open to feedback and growth.</div>
+        <div class="dur-badge" style="color: #3A7BD5;">00:02:04:18</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SKILLS SECTION (TIMELINE) -->
+  <div id="skills" class="section-container">
+    <div class="panel-header">SEQUENCE: SKILLS_MASTER</div>
+    <div class="ruler" id="timeline-ruler">
+      <!-- Ticks injected by JS -->
+    </div>
+    
+    <div style="position: relative; padding-bottom: 24px;">
+      <div class="playhead" id="playhead"></div>
+      
+      <div class="track-row">
+        <div class="track-label"><span class="font-mono" style="color: var(--text-primary);">V4</span> <div style="width:6px;height:6px;border:1px solid var(--text-muted);"></div></div>
+        <div class="track-area">
+          <div class="clip-block target-width" data-width="65" style="left: 5%; background: #1A3A2A;">Motion Graphics (After Effects)</div>
+        </div>
+      </div>
+      
+      <div class="track-row">
+        <div class="track-label"><span class="font-mono" style="color: var(--text-primary);">V3</span> <div style="width:6px;height:6px;border:1px solid var(--text-muted);"></div></div>
+        <div class="track-area">
+          <div class="clip-block target-width" data-width="80" style="left: 10%; background: #2A1A0A;">Color Correction & Grading</div>
+        </div>
+      </div>
+      
+      <div class="track-row">
+        <div class="track-label"><span class="font-mono" style="color: var(--text-primary);">V2</span> <div style="width:6px;height:6px;border:1px solid var(--text-muted);"></div></div>
+        <div class="track-area">
+          <div class="clip-block target-width" data-width="100" style="left: 0%; background: #1A1A2A;">Short-form & Long-form Editing</div>
+        </div>
+      </div>
+
+      <div class="track-row">
+        <div class="track-label"><span class="font-mono" style="color: var(--text-primary);">V1</span> <div style="width:6px;height:6px;border:1px solid var(--text-muted);"></div></div>
+        <div class="track-area">
+          <div class="clip-block target-width" data-width="50" style="left: 20%; background: #2A1A1A;">Visual Effects (Basic)</div>
+        </div>
+      </div>
+
+      <div class="track-row" style="background: #0A0A0A;">
+        <div class="track-label"><span class="font-mono" style="color: var(--text-primary);">A2</span> <div style="width:6px;height:6px;border:1px solid var(--text-muted);"></div></div>
+        <div class="track-area">
+          <div class="audio-waveform" id="wf-a2"></div>
+        </div>
+      </div>
+
+      <div class="track-row" style="background: #0A0A0A;">
+        <div class="track-label"><span class="font-mono" style="color: var(--text-primary);">A1</span> <div style="width:6px;height:6px;border:1px solid var(--text-muted);"></div></div>
+        <div class="track-area">
+          <div class="audio-waveform" id="wf-a1"></div>
+        </div>
+      </div>
+
+      <div class="track-row">
+        <div class="track-label"><span class="font-mono" style="color: var(--text-primary);">FX</span> <div style="width:6px;height:6px;border:1px solid var(--text-muted);"></div></div>
+        <div class="track-area">
+          <div class="clip-block target-width" data-width="20" style="left: 15%; background: #332244;">Color Wheels</div>
+          <div class="clip-block target-width" data-width="15" style="left: 45%; background: #332244;">Curves</div>
+          <div class="clip-block target-width" data-width="25" style="left: 70%; background: #332244;">LUTs</div>
+        </div>
+      </div>
+
+      <div class="track-row">
+        <div class="track-label"><span class="font-mono" style="color: var(--text-primary);">GFX</span> <div style="width:6px;height:6px;border:1px solid var(--text-muted);"></div></div>
+        <div class="track-area">
+          <div class="clip-block target-width" data-width="10" style="left: 5%; background: #443322;">Text</div>
+          <div class="clip-block target-width" data-width="15" style="left: 30%; background: #443322;">Lower Third</div>
+          <div class="clip-block target-width" data-width="8" style="left: 60%; background: #443322;">Logo Anim</div>
+          <div class="clip-block target-width" data-width="12" style="left: 80%; background: #443322;">Outro</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TOOLS SECTION -->
+  <div id="tools" class="section-container">
+    <div class="panel-header" style="margin: -16px -16px 16px -16px;">EFFECT CONTROLS: tools_software.aep</div>
+    
+    <div class="effect-group">
+      <div class="effect-header"><span>▼</span> ADOBE PREMIERE PRO</div>
+      <div class="effect-prop"><div class="prop-label">Proficiency</div><div class="prop-val"><div class="progress-track"><div class="progress-fill fill-target" data-pct="92"></div></div> 92%</div></div>
+      <div class="effect-prop"><div class="prop-label">Type</div><div class="prop-val">Video NLE</div></div>
+      <div class="effect-prop"><div class="prop-label">Usage</div><div class="prop-val">Primary editing tool</div></div>
+    </div>
+
+    <div class="effect-group">
+      <div class="effect-header"><span>▼</span> ADOBE AFTER EFFECTS</div>
+      <div class="effect-prop"><div class="prop-label">Proficiency</div><div class="prop-val"><div class="progress-track"><div class="progress-fill fill-target" data-pct="85"></div></div> 85%</div></div>
+      <div class="effect-prop"><div class="prop-label">Type</div><div class="prop-val">Motion graphics / VFX</div></div>
+      <div class="effect-prop"><div class="prop-label">Usage</div><div class="prop-val">Motion design, titles, compositing</div></div>
+    </div>
+
+    <div class="effect-group">
+      <div class="effect-header"><span>▼</span> ADOBE PHOTOSHOP</div>
+      <div class="effect-prop"><div class="prop-label">Proficiency</div><div class="prop-val"><div class="progress-track"><div class="progress-fill fill-target" data-pct="80"></div></div> 80%</div></div>
+      <div class="effect-prop"><div class="prop-label">Type</div><div class="prop-val">Image editing</div></div>
+      <div class="effect-prop"><div class="prop-label">Usage</div><div class="prop-val">Thumbnails, retouching, color</div></div>
+    </div>
+
+    <div class="effect-group">
+      <div class="effect-header"><span>▼</span> ADOBE ILLUSTRATOR</div>
+      <div class="effect-prop"><div class="prop-label">Proficiency</div><div class="prop-val"><div class="progress-track"><div class="progress-fill fill-target" data-pct="75"></div></div> 75%</div></div>
+      <div class="effect-prop"><div class="prop-label">Type</div><div class="prop-val">Vector design</div></div>
+      <div class="effect-prop"><div class="prop-label">Usage</div><div class="prop-val">Social creatives, logo work</div></div>
+    </div>
+
+    <div class="effect-group" style="border-bottom: none;">
+      <div class="effect-header"><span>▼</span> CAPCUT</div>
+      <div class="effect-prop"><div class="prop-label">Proficiency</div><div class="prop-val"><div class="progress-track"><div class="progress-fill fill-target" data-pct="90"></div></div> 90%</div></div>
+      <div class="effect-prop"><div class="prop-label">Type</div><div class="prop-val">Mobile / quick edit</div></div>
+      <div class="effect-prop"><div class="prop-label">Usage</div><div class="prop-val">Reels, shorts, fast-turnaround edits</div></div>
+    </div>
+
+  </div>
+
+  <!-- EXPERIENCE SECTION -->
+  <div id="experience" class="section-container">
+    <div class="panel-header">RENDER QUEUE — ABHILASH_P_EXPORTS</div>
+    <div class="queue-header">
+      <div class="q-col-1">#</div><div class="q-col-2">JOB NAME</div><div class="q-col-3">STATUS</div><div class="q-col-4">DURATION</div><div class="q-col-5">FORMAT</div><div class="q-col-6">DATE</div>
+    </div>
+    
+    <div class="queue-row render-row">
+      <div class="queue-main">
+        <div class="q-col-1">001</div><div class="q-col-2">FREELANCE_VIDEO_EDITOR.prproj</div>
+        <div class="q-col-3"><div class="badge-render"><span class="rec-blink" style="width:4px;height:4px;background:var(--amber);border-radius:50% !important;"></span> RENDERING</div></div>
+        <div class="q-col-4">2024–Present</div><div class="q-col-5">MP4/H.264</div><div class="q-col-6">Ongoing</div>
+      </div>
+      <div class="queue-details">
+        <div>&nbsp;&nbsp;·&nbsp;&nbsp;Short-form reels for social media</div>
+        <div>&nbsp;&nbsp;·&nbsp;&nbsp;Motion graphics and visual effects</div>
+        <div>&nbsp;&nbsp;·&nbsp;&nbsp;Photo retouching and color enhancement</div>
+        <div>&nbsp;&nbsp;·&nbsp;&nbsp;Social media creatives and thumbnails</div>
+        <div>&nbsp;&nbsp;·&nbsp;&nbsp;Client feedback-driven delivery</div>
+      </div>
+    </div>
+
+    <div class="queue-row render-row">
+      <div class="queue-main">
+        <div class="q-col-1">002</div><div class="q-col-2">MOTION_GRAPHICS_WORK.aep</div>
+        <div class="q-col-3"><div class="badge-render"><span class="rec-blink" style="width:4px;height:4px;background:var(--amber);border-radius:50% !important;"></span> RENDERING</div></div>
+        <div class="q-col-4">2024–Present</div><div class="q-col-5">ProRes</div><div class="q-col-6">Ongoing</div>
+      </div>
+      <div class="queue-details">
+        <div>&nbsp;&nbsp;·&nbsp;&nbsp;Custom title sequences</div>
+        <div>&nbsp;&nbsp;·&nbsp;&nbsp;Logo animation and lower thirds</div>
+      </div>
+    </div>
+
+    <div class="queue-row render-row">
+      <div class="queue-main">
+        <div class="q-col-1">003</div><div class="q-col-2">GRAPHIC_DESIGN_PROJECTS.ai</div>
+        <div class="q-col-3"><div class="badge-done">✓ COMPLETE</div></div>
+        <div class="q-col-4">2024</div><div class="q-col-5">PNG/SVG</div><div class="q-col-6">Done</div>
+      </div>
+      <div class="queue-details">
+        <div>&nbsp;&nbsp;·&nbsp;&nbsp;Vector illustrations and layouts</div>
+      </div>
+    </div>
+
+    <div class="queue-row render-row">
+      <div class="queue-main">
+        <div class="q-col-1">004</div><div class="q-col-2">MCA_THESIS_PROJECT.mp4</div>
+        <div class="q-col-3"><div class="badge-done">✓ COMPLETE</div></div>
+        <div class="q-col-4">2025</div><div class="q-col-5">H.264</div><div class="q-col-6">Done</div>
+      </div>
+      <div class="queue-details">
+        <div>&nbsp;&nbsp;·&nbsp;&nbsp;Master of Computer Applications final presentation</div>
+      </div>
+    </div>
+
+    <div class="queue-row render-row">
+      <div class="queue-main">
+        <div class="q-col-1">005</div><div class="q-col-2">BCA_GRADUATION.pdf</div>
+        <div class="q-col-3"><div class="badge-done">✓ COMPLETE</div></div>
+        <div class="q-col-4">2022</div><div class="q-col-5">Archive</div><div class="q-col-6">Done</div>
+      </div>
+      <div class="queue-details">
+        <div>&nbsp;&nbsp;·&nbsp;&nbsp;Bachelor of Computer Applications</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- EDUCATION SECTION -->
+  <div id="education" class="section-container">
+    <div class="panel-header" style="margin: -16px -16px 16px -16px;">PROJECT SETTINGS — SEQUENCE PROPERTIES</div>
+    
+    <div class="font-mono" style="color: var(--amber); margin-bottom: 8px;">SEQUENCE NAME: &nbsp;&nbsp;&nbsp;PORTFOLIO_MASTER_V7</div>
+    <div style="height: 1px; background: var(--border-lit); margin-bottom: 8px;"></div>
+    
+    <div class="edu-block">
+      <div class="edu-row"><div class="edu-label">INSTITUTION</div><div class="edu-val">Chinmaya Institute of Technology, Kannur</div></div>
+      <div class="edu-row"><div class="edu-label">DEGREE</div><div class="edu-val">Master of Computer Applications (MCA)</div></div>
+      <div class="edu-row"><div class="edu-label">DURATION</div><div class="edu-val">2023 – 2025</div></div>
+      <div class="edu-row"><div class="edu-label">STATUS</div><div class="edu-val" style="color: var(--green-tc);">● COMPLETED</div></div>
+      <div class="edu-row" style="border-bottom: none;"><div class="edu-label">FRAME RATE</div><div class="edu-val">High Distinction</div></div>
+    </div>
+
+    <div style="height: 1px; background: var(--border-lit); margin-bottom: 8px;"></div>
+
+    <div class="edu-block">
+      <div class="edu-row"><div class="edu-label">INSTITUTION</div><div class="edu-val">Sree Narayanaguru College of Advance Studies, Kannur</div></div>
+      <div class="edu-row"><div class="edu-label">DEGREE</div><div class="edu-val">Bachelor of Computer Applications (BCA)</div></div>
+      <div class="edu-row"><div class="edu-label">DURATION</div><div class="edu-val">2019 – 2022</div></div>
+      <div class="edu-row"><div class="edu-label">STATUS</div><div class="edu-val" style="color: var(--green-tc);">● COMPLETED</div></div>
+      <div class="edu-row" style="border-bottom: none;"><div class="edu-label">OUTPUT FORMAT</div><div class="edu-val">Foundation Complete</div></div>
+    </div>
+  </div>
+
+  <!-- CONTACT SECTION -->
+  <div id="contact" class="section-container">
+    <div id="contact-left">
+      <div class="corner-bracket cb-tl"></div>
+      <div class="corner-bracket cb-tr"></div>
+      <div class="corner-bracket cb-bl"></div>
+      <div class="corner-bracket cb-br"></div>
+      
+      <div class="font-bebas" style="font-size: 64px; color: white;">ABHILASH P</div>
+      <div class="font-mono" style="color: var(--text-muted); margin-top: 8px;">VIDEO EDITOR · MOTION DESIGNER</div>
+      
+      <div style="position: absolute; bottom: 32px; left: 32px; font-family: 'JetBrains Mono'; font-size: 11px; color: var(--green-tc);">00:02:34:12</div>
+      
+      <div class="range-bar">
+        <div class="range-fill"></div>
+        <div class="range-handle" style="left: 10%;"></div>
+        <div class="range-handle" style="right: 10%;"></div>
+      </div>
+    </div>
+
+    <div id="contact-right">
+      <div class="panel-header" style="margin: -24px -24px 24px -24px;">EXPORT SETTINGS — FINAL OUTPUT</div>
+      
+      <div class="edu-row" style="border: none;"><div class="edu-label" style="width: 120px;">FORMAT</div><div class="edu-val">H.264</div></div>
+      <div class="edu-row" style="border: none;"><div class="edu-label" style="width: 120px;">PRESET</div><div class="edu-val">Abhilash P — Cinematic Edit</div></div>
+      <div class="edu-row" style="border: none; margin-bottom: 16px;"><div class="edu-label" style="width: 120px;">OUTPUT NAME</div><div class="edu-val" style="color: #3A7BD5; text-decoration: underline;">abhilash_p_2024.mp4</div></div>
+      
+      <div style="height: 1px; background: var(--border-lit); margin-bottom: 16px;"></div>
+      
+      <div class="edu-row" style="border: none;"><div class="edu-label" style="width: 120px;">FRAME RATE</div><div class="edu-val">23.976 fps</div></div>
+      <div class="edu-row" style="border: none;"><div class="edu-label" style="width: 120px;">RESOLUTION</div><div class="edu-val">1920 × 1080</div></div>
+      <div class="edu-row" style="border: none;"><div class="edu-label" style="width: 120px;">COLOR SPACE</div><div class="edu-val">Rec. 709</div></div>
+      <div class="edu-row" style="border: none; margin-bottom: 16px;"><div class="edu-label" style="width: 120px;">BITRATE</div><div class="edu-val">VBR, 2-pass, High</div></div>
+
+      <div style="height: 1px; background: var(--border-lit); margin-bottom: 16px;"></div>
+
+      <div class="font-mono" style="color: var(--amber); margin-bottom: 8px;">DELIVER TO:</div>
+      
+      <a href="mailto:369abhilash@gmail.com" class="contact-row">
+        <div class="c-label">EMAIL</div><div>369abhilash@gmail.com</div>
+      </a>
+      <a href="tel:+919946664218" class="contact-row">
+        <div class="c-label">PHONE</div><div>+91 9946664218</div>
+      </a>
+      <a href="https://instagram.com/_abhilazh__" target="_blank" class="contact-row">
+        <div class="c-label">INSTAGRAM</div><div>@_abhilazh__</div>
+      </a>
+      <a href="javascript:void(0)" class="contact-row">
+        <div class="c-label">LOCATION</div><div>Kannur, Kerala, India</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- BOTTOM STATUS BAR -->
+  <div id="bottom-bar" class="slide-up">
+    <div class="font-mono" style="color: var(--text-muted);">SEQUENCE: PORTFOLIO_MASTER_V7.prproj</div>
+    <div class="font-mono" style="color: var(--green-tc);" id="global-timecode">01:00:00:00</div>
+    <div class="font-mono" style="color: var(--text-muted);">1920×1080 / 23.976 fps / ProRes 4444</div>
+  </div>
+
+  <script>
+    // 1. CPU Random Walk
+    const cpuMeter = document.getElementById('cpu-meter');
+    setInterval(() => {
+      const val = Math.floor(Math.random() * (65 - 30 + 1) + 30);
+      cpuMeter.textContent = val + '%';
+    }, 3000);
+
+    // 2. Real-time Timecode
+    const tc1 = document.getElementById('global-timecode');
+    const tc2 = document.getElementById('hero-timecode');
+    let frames = 0;
+    setInterval(() => {
+      frames++;
+      const totalFrames = (1 * 60 * 60 * 24) + frames; // Start at 01:00:00:00
+      const h = Math.floor(totalFrames / (24 * 60 * 60)).toString().padStart(2, '0');
+      const m = Math.floor((totalFrames / (24 * 60)) % 60).toString().padStart(2, '0');
+      const s = Math.floor((totalFrames / 24) % 60).toString().padStart(2, '0');
+      const f = (totalFrames % 24).toString().padStart(2, '0');
+      const timeStr = `${h}:${m}:${s}:${f}`;
+      tc1.textContent = timeStr;
+      tc2.textContent = timeStr;
+    }, 1000 / 24);
+
+    // 3. Generate Source Waveform Bars
+    const srcWf = document.getElementById('source-waveform');
+    for (let i = 0; i < 30; i++) {
+      const bar = document.createElement('div');
+      bar.className = 'wf-bar';
+      bar.style.height = (20 + Math.random() * 60) + '%';
+      bar.style.animationDelay = (Math.random() * -2) + 's';
+      srcWf.appendChild(bar);
+    }
+
+    // 4. Generate Timeline Waveforms
+    function generateWaveform(id, barsCount) {
+      const container = document.getElementById(id);
+      for (let i = 0; i < barsCount; i++) {
+        const bar = document.createElement('div');
+        bar.className = 'audio-bar';
+        bar.style.height = (10 + Math.random() * 80) + '%';
+        bar.style.transformOrigin = 'center';
+        container.appendChild(bar);
+      }
+    }
+    generateWaveform('wf-a2', 150);
+    generateWaveform('wf-a1', 150);
+
+    // 5. Generate Ruler Ticks
+    const ruler = document.getElementById('timeline-ruler');
+    let tickPos = 0;
+    let labelSec = 0;
+    while (tickPos < window.innerWidth) {
+      const isMajor = (labelSec % 4 === 0);
+      const tick = document.createElement('div');
+      tick.className = 'ruler-tick';
+      tick.style.left = tickPos + 'px';
+      tick.style.height = isMajor ? '8px' : '4px';
+      ruler.appendChild(tick);
+      
+      if (isMajor) {
+        const label = document.createElement('div');
+        label.className = 'ruler-label';
+        label.style.left = tickPos + 'px';
+        const sec = labelSec * 2.5; // arbitrary scaling
+        const m = Math.floor(sec / 60).toString().padStart(2, '0');
+        const s = Math.floor(sec % 60).toString().padStart(2, '0');
+        label.textContent = `01:${m}:${s}`;
+        ruler.appendChild(label);
+      }
+      
+      tickPos += 15; // 15px per minor tick
+      labelSec++;
+    }
+
+    // 6. Scroll Animations via IntersectionObserver
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // Track Blocks
+          if (entry.target.classList.contains('target-width')) {
+            const w = entry.target.getAttribute('data-width');
+            setTimeout(() => {
+              entry.target.style.transition = 'width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)';
+              entry.target.style.width = w + '%';
+            }, Math.random() * 200); // slight stagger
+            observer.unobserve(entry.target);
+          }
+          // Progress Fills
+          if (entry.target.classList.contains('fill-target')) {
+            const p = entry.target.getAttribute('data-pct');
+            entry.target.style.width = p + '%';
+            observer.unobserve(entry.target);
+          }
+          // Render Queue Rows
+          if (entry.target.classList.contains('render-row')) {
+            entry.target.style.opacity = '0';
+            entry.target.style.transform = 'translateY(20px)';
+            entry.target.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+            setTimeout(() => {
+              entry.target.style.opacity = '1';
+              entry.target.style.transform = 'translateY(0)';
+            }, Math.random() * 150);
+            observer.unobserve(entry.target);
+          }
+        }
+      });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.target-width, .fill-target, .render-row').forEach(el => observer.observe(el));
+
+    // 7. Timeline Playhead Scrubbing
+    const playhead = document.getElementById('playhead');
+    const skillsSection = document.getElementById('skills');
+    window.addEventListener('scroll', () => {
+      const rect = skillsSection.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      
+      if (rect.top < windowHeight && rect.bottom > 0) {
+        // Calculate progress through the section
+        const totalScroll = rect.height + windowHeight;
+        const currentScroll = windowHeight - rect.top;
+        let progress = currentScroll / totalScroll;
+        
+        progress = Math.max(0, Math.min(1, progress));
+        playhead.style.transform = `translateX(${progress * window.innerWidth}px)`;
+      }
+    });
+
+  </script>
+</body>
+</html>
