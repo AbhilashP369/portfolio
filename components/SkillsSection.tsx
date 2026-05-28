@@ -109,7 +109,7 @@ export default function SkillsSection() {
   );
 }
 
-function TrackClip({ item, color, isAudio }: { item: any, color: string, isAudio?: boolean }) {
+function TrackClip({ item, color, isAudio }: { item: { name: string; w: string; ml: string }, color: string, isAudio?: boolean }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 

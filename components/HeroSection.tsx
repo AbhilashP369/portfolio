@@ -3,7 +3,7 @@ import { motion, useMotionValue, useTransform } from "framer-motion";
 import { useState } from "react";
 
 export default function HeroSection() {
-  const [isHovering, setIsHovering] = useState(false);
+  const [, setIsHovering] = useState(false);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 

@@ -71,7 +71,7 @@ export default function ToolsSection() {
   );
 }
 
-function ControlGroup({ title, items }: { title: string, items: any[] }) {
+function ControlGroup({ title, items }: { title: string, items: { name: string; value: number }[] }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
 
