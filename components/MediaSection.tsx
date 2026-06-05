@@ -1,109 +1,542 @@
 "use client";
-import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
+import { useRef, useState, useCallback, useEffect } from "react";
 
+/* ─────────────────────────────────────────────────────────
+   PROJECT DATA — add / remove entries to update the grid.
+   Videos live in  public/works/
+   ───────────────────────────────────────────────────────── */
+interface Project {
+  filename: string;        // file inside public/works/
+  title: string;           // display title
+  category: string;        // Short-Form · Commercial etc.
+  description: string;     // shown in modal
+  software: string[];      // tools used
+  year: string;
+}
+
+const projects: Project[] = [
+  {
+    filename: "1flash.mp4",
+    title: "Flash Edit",
+    category: "Short-Form · Reel",
+    description:
+      "Quick-cut flash edit with rapid transitions, beat-synced drops, and high-impact visuals designed to stop the scroll.",
+    software: ["Premiere Pro", "After Effects"],
+    year: "2025",
+  },
+  {
+    filename: "cenimaticreel.mov",
+    title: "Cinematic Reel",
+    category: "Showreel · Cinematic",
+    description:
+      "A curated showreel showcasing cinematic editing chops — colour grading, smooth transitions, and storytelling through visuals.",
+    software: ["Premiere Pro", "DaVinci Resolve", "After Effects"],
+    year: "2026",
+  },
+  {
+    filename: "finaltripv.mp4",
+    title: "Final Trip Edit",
+    category: "Cinematic · Travel",
+    description:
+      "A cinematic travel film capturing scenic landscapes and candid moments. Warm tones, atmospheric sound design, and smooth gimbal footage.",
+    software: ["Premiere Pro", "After Effects"],
+    year: "2026",
+  },
+  {
+    filename: "halogrmtrip.mp4",
+    title: "Hologram Trip",
+    category: "VFX · Motion Graphics",
+    description:
+      "A VFX-heavy visual trip blending holographic effects with real-world footage. Experimental editing with glitch art and motion design.",
+    software: ["After Effects", "Premiere Pro", "Photoshop"],
+    year: "2025",
+  },
+  {
+    filename: "promotioncollege-event.mov",
+    title: "College Event Promo",
+    category: "Promotional · Event",
+    description:
+      "High-energy promotional video for a college cultural event. Dynamic editing, crowd shots, and event branding packaged for social media.",
+    software: ["Premiere Pro", "Photoshop", "CapCut"],
+    year: "2026",
+  },
+  {
+    filename: "semm.mp4",
+    title: "Seminar Highlight",
+    category: "Short-Form · Event",
+    description:
+      "Tight seminar highlight reel capturing keynote moments, audience reactions, and behind-the-scenes energy.",
+    software: ["Premiere Pro", "After Effects"],
+    year: "2025",
+  },
+  {
+    filename: "uniyarchapainting.mov",
+    title: "Uniyarcha Painting",
+    category: "Art · Visual Story",
+    description:
+      "A visual storytelling piece documenting the creation of a traditional painting. Macro close-ups, time-lapses, and meditative pacing.",
+    software: ["Premiere Pro", "DaVinci Resolve"],
+    year: "2026",
+  },
+  {
+    filename: "vacmate.mp4",
+    title: "Vacmate Edit",
+    category: "Short-Form · Social Media",
+    description:
+      "Punchy social media edit with fast cuts, trendy transitions, and bold typography. Built for Instagram and YouTube Shorts.",
+    software: ["Premiere Pro", "CapCut", "After Effects"],
+    year: "2026",
+  },
+  {
+    filename: "vinus.mp4",
+    title: "Vinus Film",
+    category: "Long-Form · Cinematic",
+    description:
+      "A longer-form cinematic piece with narrative depth. Carefully graded footage, layered sound design, and intentional pacing.",
+    software: ["Premiere Pro", "DaVinci Resolve", "After Effects"],
+    year: "2026",
+  },
+];
+
+/* ─────────────────────────────────────────────────────────
+   HELPERS
+   ───────────────────────────────────────────────────────── */
+function formatDuration(seconds: number): string {
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = Math.floor(seconds % 60);
+  const f = Math.floor((seconds % 1) * 24); // 24fps "frames"
+  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}:${String(f).padStart(2, "0")}`;
+}
+
+/* ─────────────────────────────────────────────────────────
+   MAIN SECTION
+   ───────────────────────────────────────────────────────── */
 export default function MediaSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
-
-  const mediaItems = [
-    { title: "Commercial_Edit_v3.mp4", duration: "00:00:30:00", color: "from-blue-900 to-deep" },
-    { title: "Music_Video_Master.mp4", duration: "00:03:45:12", color: "from-purple-900 to-deep" },
-    { title: "Documentary_Trailer.mp4", duration: "00:01:15:00", color: "from-amber-dim to-deep" },
-    { title: "VFX_Breakdown.mp4", duration: "00:00:45:20", color: "from-green-900 to-deep" },
-    { title: "Social_Media_Reel.mp4", duration: "00:00:15:00", color: "from-pink-900 to-deep" },
-    { title: "Color_Grade_Showreel.mp4", duration: "00:02:10:05", color: "from-indigo-900 to-deep" },
-  ];
+  const [activeProject, setActiveProject] = useState<Project | null>(null);
 
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.1 }
-    }
+      transition: { staggerChildren: 0.1 },
+    },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, scale: 0.95 },
-    visible: { opacity: 1, scale: 1 }
+    hidden: { opacity: 0, scale: 0.95, y: 20 },
+    visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.5 } },
   };
 
   return (
-    <section 
-      className="relative w-full min-h-screen flex flex-col p-4 pb-20 gap-2 overflow-hidden"
-      data-cursor-label="PLAY"
-    >
-      <div className="flex-1 bg-panel border border-border flex flex-col p-2">
-        <div className="font-mono text-sm text-primary uppercase border-b border-border pb-1 tracking-widest mb-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg>
-            Media Browser: Selected Works
+    <>
+      <section
+        className="relative w-full min-h-screen flex flex-col p-4 pb-20 gap-2 overflow-hidden"
+        data-cursor-label="PLAY"
+      >
+        <div className="flex-1 bg-panel border border-border flex flex-col p-2">
+          {/* Header Bar */}
+          <div className="font-mono text-sm text-primary uppercase border-b border-border pb-1 tracking-widest mb-4 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18" />
+                <line x1="7" y1="2" x2="7" y2="22" />
+                <line x1="17" y1="2" x2="17" y2="22" />
+                <line x1="2" y1="12" x2="22" y2="12" />
+                <line x1="2" y1="7" x2="7" y2="7" />
+                <line x1="2" y1="17" x2="7" y2="17" />
+                <line x1="17" y1="17" x2="22" y2="17" />
+                <line x1="17" y1="7" x2="22" y2="7" />
+              </svg>
+              Media Browser: Selected Works
+            </div>
+            <div className="flex gap-4 text-[10px] text-muted">
+              <span className="interactive cursor-none hover:text-primary">Thumbnail View</span>
+              <span className="interactive cursor-none hover:text-primary">List View</span>
+            </div>
           </div>
-          <div className="flex gap-4 text-[10px] text-muted">
-            <span className="interactive cursor-none hover:text-primary">Thumbnail View</span>
-            <span className="interactive cursor-none hover:text-primary">List View</span>
-          </div>
+
+          {/* Grid */}
+          <motion.div
+            ref={ref}
+            variants={containerVariants}
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-2 overflow-y-auto"
+          >
+            {projects.map((project, i) => (
+              <MediaCard
+                key={i}
+                project={project}
+                variants={itemVariants}
+                onClick={() => setActiveProject(project)}
+              />
+            ))}
+          </motion.div>
         </div>
-        
-        <motion.div 
-          ref={ref}
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-2 overflow-y-auto"
-        >
-          {mediaItems.map((item, i) => (
-            <MediaCard key={i} item={item} variants={itemVariants} />
-          ))}
-        </motion.div>
-      </div>
-    </section>
+      </section>
+
+      {/* Program Monitor Modal */}
+      <AnimatePresence>
+        {activeProject && (
+          <ProgramMonitor
+            project={activeProject}
+            onClose={() => setActiveProject(null)}
+          />
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
-function MediaCard({ item, variants }: { item: { title: string; duration: string; color: string }, variants: import("framer-motion").Variants }) {
+/* ─────────────────────────────────────────────────────────
+   MEDIA CARD — video thumbnail with lazy loading
+   ───────────────────────────────────────────────────────── */
+function MediaCard({
+  project,
+  variants,
+  onClick,
+}: {
+  project: Project;
+  variants: import("framer-motion").Variants;
+  onClick: () => void;
+}) {
   const [isHovering, setIsHovering] = useState(false);
+  const [duration, setDuration] = useState<string>("--:--:--:--");
+  const [thumbReady, setThumbReady] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const handleMetadata = useCallback(() => {
+    if (videoRef.current) {
+      setDuration(formatDuration(videoRef.current.duration));
+      setThumbReady(true);
+    }
+  }, []);
 
   return (
     <motion.div
       variants={variants}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
-      className="flex flex-col bg-deep border border-border group interactive cursor-none relative"
+      onClick={onClick}
+      className="flex flex-col bg-deep border border-border group interactive cursor-none relative transition-shadow duration-300 hover:shadow-[0_0_16px_rgba(232,160,69,0.25)] hover:border-amber"
     >
-      <div className={`aspect-video w-full relative overflow-hidden bg-gradient-to-br ${item.color}`}>
-        {/* Placeholder grid for video look */}
-        <div className="absolute inset-0 bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(255,255,255,0.02)_10px,rgba(255,255,255,0.02)_20px)] pointer-events-none" />
-        
-        {/* Timecode overlay */}
-        <div className="absolute bottom-2 right-2 bg-black/70 px-1 font-mono text-[10px] text-primary">
-          {item.duration}
+      <div className="aspect-video w-full relative overflow-hidden bg-deep">
+        {/* Video Thumbnail — preload metadata only, lazy */}
+        <video
+          ref={videoRef}
+          src={`/works/${project.filename}`}
+          preload="metadata"
+          muted
+          playsInline
+          onLoadedMetadata={handleMetadata}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${thumbReady ? "opacity-100" : "opacity-0"}`}
+        />
+
+        {/* Fallback while thumbnail loads */}
+        {!thumbReady && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-6 h-6 border-2 border-amber border-t-transparent animate-spin" style={{ borderRadius: "50%" }} />
+          </div>
+        )}
+
+        {/* Duration badge */}
+        <div className="absolute bottom-2 right-2 bg-black/80 px-1.5 py-0.5 font-mono text-[10px] text-primary z-10">
+          {duration}
         </div>
-        
-        {/* Play Button Overlay (visible on hover) */}
-        <motion.div 
+
+        {/* Scanline pattern overlay */}
+        <div className="absolute inset-0 bg-[repeating-linear-gradient(to_bottom,transparent,transparent_2px,rgba(0,0,0,0.15)_2px,rgba(0,0,0,0.15)_4px)] pointer-events-none opacity-30" />
+
+        {/* Play button overlay on hover */}
+        <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: isHovering ? 1 : 0, scale: isHovering ? 1 : 0.8 }}
-          className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm transition-all"
+          animate={{
+            opacity: isHovering ? 1 : 0,
+            scale: isHovering ? 1 : 0.8,
+          }}
+          transition={{ duration: 0.2 }}
+          className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-[2px] z-10"
         >
-          <div className="w-12 h-12 rounded-full border-2 border-amber flex items-center justify-center text-amber">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          <div className="w-14 h-14 border-2 border-amber flex items-center justify-center text-amber" style={{ borderRadius: "50%" }}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+              <polygon points="6 3 20 12 6 21 6 3" />
+            </svg>
           </div>
         </motion.div>
-        
-        {/* Mock progress bar on hover */}
-        <motion.div 
+
+        {/* Progress bar sweep on hover */}
+        <motion.div
           initial={{ width: "0%" }}
           animate={{ width: isHovering ? "100%" : "0%" }}
-          transition={{ duration: 4, ease: "linear" }}
-          className="absolute bottom-0 left-0 h-1 bg-amber"
+          transition={{ duration: 3, ease: "linear" }}
+          className="absolute bottom-0 left-0 h-[3px] bg-amber z-20"
         />
       </div>
-      
-      <div className="p-2 border-t border-border flex items-center justify-between group-hover:bg-raised transition-colors">
-        <span className="font-sans text-xs text-primary truncate">{item.title}</span>
-        <div className="w-2 h-2 rounded-full bg-border group-hover:bg-green-tc transition-colors" />
+
+      {/* File info bar */}
+      <div className="p-2.5 border-t border-border flex items-center justify-between group-hover:bg-raised transition-colors">
+        <div className="flex flex-col gap-0.5 min-w-0">
+          <span className="font-mono text-xs text-primary truncate">{project.filename}</span>
+          <span className="font-mono text-[10px] text-muted truncate">{project.category}</span>
+        </div>
+        <div className="w-2 h-2 bg-border group-hover:bg-green-tc transition-colors shrink-0 ml-2" style={{ borderRadius: "50%" }} />
       </div>
+    </motion.div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────
+   PROGRAM MONITOR — fullscreen modal with video player
+   ───────────────────────────────────────────────────────── */
+function ProgramMonitor({
+  project,
+  onClose,
+}: {
+  project: Project;
+  onClose: () => void;
+}) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const progressRef = useRef<HTMLDivElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState("00:00:00:00");
+  const [totalDuration, setTotalDuration] = useState("00:00:00:00");
+  const [progress, setProgress] = useState(0);
+
+  /* ESC to close */
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === " ") {
+        e.preventDefault();
+        togglePlayback();
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onClose]);
+
+  const togglePlayback = useCallback(() => {
+    if (!videoRef.current) return;
+    if (videoRef.current.paused) {
+      videoRef.current.play();
+      setIsPlaying(true);
+    } else {
+      videoRef.current.pause();
+      setIsPlaying(false);
+    }
+  }, []);
+
+  const handleTimeUpdate = useCallback(() => {
+    if (!videoRef.current) return;
+    setCurrentTime(formatDuration(videoRef.current.currentTime));
+    setProgress(
+      (videoRef.current.currentTime / videoRef.current.duration) * 100
+    );
+  }, []);
+
+  const handleLoadedMetadata = useCallback(() => {
+    if (videoRef.current) {
+      setTotalDuration(formatDuration(videoRef.current.duration));
+    }
+  }, []);
+
+  const handleSeek = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (!videoRef.current || !progressRef.current) return;
+    const rect = progressRef.current.getBoundingClientRect();
+    const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    videoRef.current.currentTime = ratio * videoRef.current.duration;
+  }, []);
+
+  return (
+    <motion.div
+      key="program-monitor-overlay"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 md:p-8"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ scale: 0.92, opacity: 0, y: 30 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.92, opacity: 0, y: 30 }}
+        transition={{ type: "spring", damping: 30, stiffness: 350 }}
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-5xl bg-panel border border-border flex flex-col max-h-[95vh] overflow-hidden"
+      >
+        {/* Title Bar */}
+        <div className="flex items-center justify-between px-4 py-2 bg-raised border-b border-border shrink-0">
+          <div className="flex items-center gap-2">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-amber">
+              <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18" />
+              <line x1="7" y1="2" x2="7" y2="22" />
+              <line x1="17" y1="2" x2="17" y2="22" />
+              <line x1="2" y1="12" x2="22" y2="12" />
+            </svg>
+            <span className="font-mono text-xs text-primary uppercase tracking-widest">
+              Program Monitor
+            </span>
+            <span className="font-mono text-[10px] text-muted ml-2">
+              {project.filename}
+            </span>
+          </div>
+          <button
+            onClick={onClose}
+            className="w-7 h-7 flex items-center justify-center text-muted hover:text-primary hover:bg-border transition-colors interactive cursor-none"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Video Area */}
+        <div
+          className="relative w-full bg-black aspect-video cursor-none interactive"
+          onClick={togglePlayback}
+        >
+          <video
+            ref={videoRef}
+            src={`/works/${project.filename}`}
+            preload="metadata"
+            playsInline
+            onTimeUpdate={handleTimeUpdate}
+            onLoadedMetadata={handleLoadedMetadata}
+            onEnded={() => setIsPlaying(false)}
+            className="w-full h-full object-contain"
+          />
+
+          {/* Center play button when paused */}
+          <AnimatePresence>
+            {!isPlaying && (
+              <motion.div
+                key="play-overlay"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.15 }}
+                className="absolute inset-0 flex items-center justify-center pointer-events-none"
+              >
+                <div className="w-16 h-16 border-2 border-amber flex items-center justify-center text-amber bg-black/40" style={{ borderRadius: "50%" }}>
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                    <polygon points="6 3 20 12 6 21 6 3" />
+                  </svg>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Scanline overlay */}
+          <div className="absolute inset-0 bg-[repeating-linear-gradient(to_bottom,transparent,transparent_2px,rgba(0,0,0,0.1)_2px,rgba(0,0,0,0.1)_4px)] pointer-events-none opacity-20" />
+        </div>
+
+        {/* Transport Controls */}
+        <div className="bg-raised border-t border-border px-4 py-2 flex flex-col gap-2 shrink-0">
+          {/* Progress Bar */}
+          <div
+            ref={progressRef}
+            className="w-full h-2 bg-deep border border-border relative cursor-none interactive group"
+            onClick={handleSeek}
+          >
+            <motion.div
+              className="absolute top-0 left-0 h-full bg-amber"
+              style={{ width: `${progress}%` }}
+            />
+            <div
+              className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-amber border border-amber opacity-0 group-hover:opacity-100 transition-opacity"
+              style={{ left: `${progress}%`, transform: `translateX(-50%) translateY(-50%)`, borderRadius: "50%" }}
+            />
+          </div>
+
+          <div className="flex items-center justify-between">
+            {/* Playback Controls */}
+            <div className="flex items-center gap-3">
+              {/* Skip Back */}
+              <button
+                onClick={() => { if (videoRef.current) videoRef.current.currentTime = Math.max(0, videoRef.current.currentTime - 5); }}
+                className="text-muted hover:text-primary transition-colors interactive cursor-none"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <polygon points="11 19 2 12 11 5 11 19" />
+                  <polygon points="22 19 13 12 22 5 22 19" />
+                </svg>
+              </button>
+
+              {/* Play / Pause */}
+              <button
+                onClick={togglePlayback}
+                className="w-9 h-9 flex items-center justify-center border border-border bg-deep text-amber hover:bg-raised hover:border-amber transition-colors interactive cursor-none"
+              >
+                {isPlaying ? (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                    <rect x="6" y="4" width="4" height="16" />
+                    <rect x="14" y="4" width="4" height="16" />
+                  </svg>
+                ) : (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                    <polygon points="6 3 20 12 6 21 6 3" />
+                  </svg>
+                )}
+              </button>
+
+              {/* Skip Forward */}
+              <button
+                onClick={() => { if (videoRef.current) videoRef.current.currentTime = Math.min(videoRef.current.duration, videoRef.current.currentTime + 5); }}
+                className="text-muted hover:text-primary transition-colors interactive cursor-none"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <polygon points="13 19 22 12 13 5 13 19" />
+                  <polygon points="2 19 11 12 2 5 2 19" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Timecode */}
+            <div className="flex items-center gap-2 font-mono text-[11px]">
+              <span className="text-amber">{currentTime}</span>
+              <span className="text-muted">/</span>
+              <span className="text-muted">{totalDuration}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Project Details */}
+        <div className="border-t border-border px-4 py-4 bg-panel overflow-y-auto shrink-0">
+          <div className="flex flex-col md:flex-row md:items-start gap-4">
+            <div className="flex-1 min-w-0">
+              <h3 className="font-sans text-lg text-primary mb-1">{project.title}</h3>
+              <div className="flex items-center gap-3 mb-3">
+                <span className="font-mono text-[10px] text-amber uppercase tracking-widest">
+                  {project.category}
+                </span>
+                <span className="font-mono text-[10px] text-muted">{project.year}</span>
+              </div>
+              <p className="font-sans text-sm text-muted leading-relaxed">{project.description}</p>
+            </div>
+
+            <div className="shrink-0 md:w-48">
+              <div className="font-mono text-[10px] text-muted uppercase tracking-widest mb-2">Software</div>
+              <div className="flex flex-wrap gap-1.5">
+                {project.software.map((sw) => (
+                  <span
+                    key={sw}
+                    className="px-2 py-1 bg-deep border border-border font-mono text-[10px] text-primary hover:border-amber hover:text-amber transition-colors"
+                  >
+                    {sw}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.div>
     </motion.div>
   );
 }
