@@ -1,6 +1,7 @@
 "use client";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useState, useCallback, useEffect } from "react";
+import SoftwareIcon from "./SoftwareIcon";
 
 /* ─────────────────────────────────────────────────────────
    PROJECT DATA — add / remove entries to update the grid.
@@ -429,7 +430,7 @@ function ProgramMonitor({
         exit={{ scale: 0.92, opacity: 0, y: 30 }}
         transition={{ type: "spring", damping: 30, stiffness: 350 }}
         onClick={(e) => e.stopPropagation()}
-        className={`bg-panel border border-border flex flex-col max-h-[95vh] overflow-hidden transition-all duration-300 ${
+        className={`bg-panel border border-border flex flex-col max-h-[95vh] md:max-h-[90vh] overflow-hidden transition-all duration-300 ${
           isPortrait ? "w-full max-w-md" : "w-full max-w-5xl"
         }`}
       >
@@ -460,10 +461,9 @@ function ProgramMonitor({
           </button>
         </div>
 
-        {/* Video Area — adapts to native video ratio */}
+        {/* Video Area — responsive scaling with max-height to protect controls */}
         <div
-          className="relative w-full bg-black cursor-none interactive"
-          style={{ aspectRatio: `${aspectRatio}` }}
+          className="relative w-full bg-black cursor-none interactive flex items-center justify-center shrink-0"
           onClick={togglePlayback}
         >
           <video
@@ -475,7 +475,7 @@ function ProgramMonitor({
             onTimeUpdate={handleTimeUpdate}
             onLoadedMetadata={handleLoadedMetadata}
             onEnded={() => setIsPlaying(false)}
-            className="w-full h-full object-contain"
+            className="w-full max-h-[45vh] md:max-h-[65vh] object-contain"
           />
 
           {/* Center play button when paused */}
@@ -592,8 +592,9 @@ function ProgramMonitor({
                 {project.software.map((sw) => (
                   <span
                     key={sw}
-                    className="px-2 py-1 bg-deep border border-border font-mono text-[10px] text-primary hover:border-amber hover:text-amber transition-colors"
+                    className="flex items-center gap-1.5 px-2 py-1 bg-deep border border-border font-mono text-[10px] text-primary hover:border-amber hover:text-amber transition-colors"
                   >
+                    <SoftwareIcon name={sw} className="w-3.5 h-3.5" />
                     {sw}
                   </span>
                 ))}

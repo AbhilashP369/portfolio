@@ -51,7 +51,7 @@ export default function BeforeAfterSection() {
         <span className="font-mono text-xs text-amber tracking-widest uppercase">
           004 / PHOTO EDITING
         </span>
-        <h2 className="text-3xl md:text-5xl font-serif text-primary uppercase tracking-wider">
+        <h2 className="text-5xl md:text-7xl font-bebas text-primary uppercase tracking-wider">
           Before & After
         </h2>
       </div>
@@ -73,7 +73,7 @@ export default function BeforeAfterSection() {
               <span className="font-mono text-[10px] text-amber uppercase tracking-widest">
                 {project.editType}
               </span>
-              <p className="font-serif text-sm text-muted">
+              <p className="font-sans text-xs text-muted uppercase tracking-widest">
                 {project.caption}
               </p>
             </div>

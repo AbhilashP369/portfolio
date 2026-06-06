@@ -2,6 +2,7 @@
 import { motion, useScroll, useTransform, useInView, useAnimationControls } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import Waveform from "./Waveform";
+import SoftwareIcon from "./SoftwareIcon";
 
 export default function SkillsSection() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -123,8 +124,9 @@ function TrackClip({ item, color, isAudio }: { item: { name: string; w: string; 
       className={`h-[90%] border-t border-l border-r rounded-sm relative flex flex-col justify-start overflow-hidden interactive ml-2 ${color}`}
       style={{ width: item.w, marginLeft: item.ml }}
     >
-      <div className="px-2 py-1 text-[10px] font-mono text-primary truncate z-10 bg-black/40">
-        [Fx] {item.name}
+      <div className="px-2 py-1 flex items-center gap-1.5 text-[10px] font-mono text-primary truncate z-10 bg-black/40">
+        <SoftwareIcon name={item.name} className="w-3.5 h-3.5 shrink-0" />
+        {item.name}
       </div>
       {isAudio && (
         <div className="absolute inset-0 top-6 bottom-1 flex items-center">

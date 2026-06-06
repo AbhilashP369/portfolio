@@ -1,5 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
+import SoftwareIcon from "./SoftwareIcon";
 
 export default function ExperienceSection() {
   const experiences = [
@@ -11,7 +12,8 @@ export default function ExperienceSection() {
         "Motion graphics and visual effects",
         "Photo editing, retouching, color enhancement",
         "Social media creatives and thumbnails"
-      ]
+      ],
+      software: ["Premiere Pro", "After Effects", "Photoshop", "Illustrator", "CapCut"]
     }
   ];
 
@@ -70,7 +72,7 @@ export default function ExperienceSection() {
                   <div className="w-32 text-green-tc font-mono hidden md:block">Rendering...</div>
                 </div>
                 
-                <div className="flex pl-10 pr-2 pb-2">
+                <div className="flex pl-10 pr-2 pb-2 justify-between items-end">
                   <ul className="text-[11px] text-muted font-mono list-none flex flex-col gap-1">
                     {exp.details.map((detail, j) => (
                       <li key={j} className="flex gap-2">
@@ -78,6 +80,16 @@ export default function ExperienceSection() {
                       </li>
                     ))}
                   </ul>
+                  
+                  {exp.software && (
+                    <div className="flex gap-2 opacity-60 group-hover:opacity-100 transition-opacity">
+                      {exp.software.map((sw, k) => (
+                        <div key={k} title={sw} className="hover:scale-110 transition-transform cursor-help">
+                          <SoftwareIcon name={sw} className="w-5 h-5" />
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </motion.div>
             ))}
