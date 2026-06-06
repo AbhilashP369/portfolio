@@ -124,6 +124,15 @@ const projects: Project[] = [
     software: ["Premiere Pro", "After Effects", "Photoshop"],
     year: "2026",
   },
+  {
+    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1780733335/gravity0_dtpoa4.mp4",
+    title: "Gravity",
+    category: "Cinematic · Experimental",
+    description:
+      "An experimental visual study of weightlessness and motion. High-contrast grading, fluid speed-ramping, and atmospheric sound design.",
+    software: ["Premiere Pro", "After Effects"],
+    year: "2026",
+  },
 ];
 
 /* ─────────────────────────────────────────────────────────
