@@ -5,6 +5,7 @@ import SectionDots from "@/components/SectionDots";
 import HeroSection from "@/components/HeroSection";
 
 import MediaSection from "@/components/MediaSection";
+import BeforeAfterSection from "@/components/BeforeAfterSection";
 import SkillsSection from "@/components/SkillsSection";
 import ToolsSection from "@/components/ToolsSection";
 import ExperienceSection from "@/components/ExperienceSection";
@@ -33,6 +34,14 @@ export default function Home() {
         </div>
         
         <MediaSection />
+        
+        <div className="w-full h-px bg-border my-4 relative">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-deep px-2 text-[10px] font-mono text-muted">
+            --- CUT ---
+          </div>
+        </div>
+
+        <BeforeAfterSection />
         
         <div className="w-full h-px bg-border my-4 relative">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-deep px-2 text-[10px] font-mono text-muted">
