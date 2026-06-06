@@ -4,10 +4,10 @@ import { useRef, useState, useCallback, useEffect } from "react";
 
 /* ─────────────────────────────────────────────────────────
    PROJECT DATA — add / remove entries to update the grid.
-   Videos live in  public/works/
+   Videos hosted on Cloudinary CDN.
    ───────────────────────────────────────────────────────── */
 interface Project {
-  filename: string;        // file inside public/works/
+  url: string;             // Cloudinary video URL
   title: string;           // display title
   category: string;        // Short-Form · Commercial etc.
   description: string;     // shown in modal
@@ -17,70 +17,7 @@ interface Project {
 
 const projects: Project[] = [
   {
-    filename: "1flash.mp4",
-    title: "Flash Edit",
-    category: "Short-Form · Reel",
-    description:
-      "Quick-cut flash edit with rapid transitions, beat-synced drops, and high-impact visuals designed to stop the scroll.",
-    software: ["Premiere Pro", "After Effects"],
-    year: "2025",
-  },
-  {
-    filename: "cenimaticreel.mov",
-    title: "Cinematic Reel",
-    category: "Showreel · Cinematic",
-    description:
-      "A curated showreel showcasing cinematic editing chops — colour grading, smooth transitions, and storytelling through visuals.",
-    software: ["Premiere Pro", "DaVinci Resolve", "After Effects"],
-    year: "2026",
-  },
-  {
-    filename: "finaltripv.mp4",
-    title: "Final Trip Edit",
-    category: "Cinematic · Travel",
-    description:
-      "A cinematic travel film capturing scenic landscapes and candid moments. Warm tones, atmospheric sound design, and smooth gimbal footage.",
-    software: ["Premiere Pro", "After Effects"],
-    year: "2026",
-  },
-  {
-    filename: "halogrmtrip.mp4",
-    title: "Hologram Trip",
-    category: "VFX · Motion Graphics",
-    description:
-      "A VFX-heavy visual trip blending holographic effects with real-world footage. Experimental editing with glitch art and motion design.",
-    software: ["After Effects", "Premiere Pro", "Photoshop"],
-    year: "2025",
-  },
-  {
-    filename: "promotioncollege-event.mov",
-    title: "College Event Promo",
-    category: "Promotional · Event",
-    description:
-      "High-energy promotional video for a college cultural event. Dynamic editing, crowd shots, and event branding packaged for social media.",
-    software: ["Premiere Pro", "Photoshop", "CapCut"],
-    year: "2026",
-  },
-  {
-    filename: "semm.mp4",
-    title: "Seminar Highlight",
-    category: "Short-Form · Event",
-    description:
-      "Tight seminar highlight reel capturing keynote moments, audience reactions, and behind-the-scenes energy.",
-    software: ["Premiere Pro", "After Effects"],
-    year: "2025",
-  },
-  {
-    filename: "uniyarchapainting.mov",
-    title: "Uniyarcha Painting",
-    category: "Art · Visual Story",
-    description:
-      "A visual storytelling piece documenting the creation of a traditional painting. Macro close-ups, time-lapses, and meditative pacing.",
-    software: ["Premiere Pro", "DaVinci Resolve"],
-    year: "2026",
-  },
-  {
-    filename: "vacmate.mp4",
+    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1780727352/vacmate_p1tbmb.mp4",
     title: "Vacmate Edit",
     category: "Short-Form · Social Media",
     description:
@@ -89,12 +26,102 @@ const projects: Project[] = [
     year: "2026",
   },
   {
-    filename: "vinus.mp4",
+    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1780727007/1flash_ftp9eb.mp4",
+    title: "Flash Edit",
+    category: "Short-Form · Reel",
+    description:
+      "Quick-cut flash edit with rapid transitions, beat-synced drops, and high-impact visuals designed to stop the scroll.",
+    software: ["Premiere Pro", "After Effects"],
+    year: "2025",
+  },
+  {
+    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/f_mp4/v1780727043/cenimaticreel_mc98ht.mov",
+    title: "Cinematic Reel",
+    category: "Showreel · Cinematic",
+    description:
+      "A curated showreel showcasing cinematic editing chops — colour grading, smooth transitions, and storytelling through visuals.",
+    software: ["Premiere Pro", "DaVinci Resolve", "After Effects"],
+    year: "2026",
+  },
+  {
+    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1780727013/finaltripv_cmxxg4.mp4",
+    title: "Final Trip Edit",
+    category: "Cinematic · Travel",
+    description:
+      "A cinematic travel film capturing scenic landscapes and candid moments. Warm tones, atmospheric sound design, and smooth gimbal footage.",
+    software: ["Premiere Pro", "After Effects"],
+    year: "2026",
+  },
+  {
+    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1780728201/halogrmtrip_1_nwn8j4.mp4",
+    title: "Hologram Trip",
+    category: "VFX · Motion Graphics",
+    description:
+      "A VFX-heavy visual trip blending holographic effects with real-world footage. Experimental editing with glitch art and motion design.",
+    software: ["After Effects", "Premiere Pro", "Photoshop"],
+    year: "2025",
+  },
+  {
+    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/f_mp4/v1780727394/promotioncollege_event_cyyai1.mov",
+    title: "College Event Promo",
+    category: "Promotional · Event",
+    description:
+      "High-energy promotional video for a college cultural event. Dynamic editing, crowd shots, and event branding packaged for social media.",
+    software: ["Premiere Pro", "Photoshop", "CapCut"],
+    year: "2026",
+  },
+  {
+    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1780727397/semm_vcjh35.mp4",
+    title: "Seminar Highlight",
+    category: "Short-Form · Event",
+    description:
+      "Tight seminar highlight reel capturing keynote moments, audience reactions, and behind-the-scenes energy.",
+    software: ["Premiere Pro", "After Effects"],
+    year: "2025",
+  },
+  {
+    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/f_mp4/v1780727327/uniyarchapainting_cirics.mov",
+    title: "Uniyarcha Painting",
+    category: "Art · Visual Story",
+    description:
+      "A visual storytelling piece documenting the creation of a traditional painting. Macro close-ups, time-lapses, and meditative pacing.",
+    software: ["Premiere Pro", "DaVinci Resolve"],
+    year: "2026",
+  },
+  {
+    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1780727189/vinus_joz4te.mp4",
     title: "Vinus Film",
     category: "Long-Form · Cinematic",
     description:
       "A longer-form cinematic piece with narrative depth. Carefully graded footage, layered sound design, and intentional pacing.",
     software: ["Premiere Pro", "DaVinci Resolve", "After Effects"],
+    year: "2026",
+  },
+  {
+    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1780726917/anythingf_yygseu.mp4",
+    title: "Anything Film",
+    category: "Short-Form · Creative",
+    description:
+      "A creative short-form film with experimental visuals and unconventional storytelling. Bold cuts and artistic flair.",
+    software: ["Premiere Pro", "After Effects"],
+    year: "2026",
+  },
+  {
+    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1780727036/kandanr_simpl_jc31g1.mp4",
+    title: "Kannur Simple",
+    category: "Cinematic · Short Film",
+    description:
+      "A simple yet cinematic take on the beauty of Kannur. Everyday moments captured with a filmic eye and warm colour palette.",
+    software: ["Premiere Pro", "DaVinci Resolve"],
+    year: "2026",
+  },
+  {
+    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1780727838/starrynight_ddezcz.mp4",
+    title: "Starry Night",
+    category: "Cinematic · Visual Art",
+    description:
+      "A mesmerising visual piece inspired by the night sky. Time-lapses, light painting, and ethereal motion set to ambient soundscapes.",
+    software: ["Premiere Pro", "After Effects", "Photoshop"],
     year: "2026",
   },
 ];
@@ -108,6 +135,12 @@ function formatDuration(seconds: number): string {
   const s = Math.floor(seconds % 60);
   const f = Math.floor((seconds % 1) * 24); // 24fps "frames"
   return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}:${String(f).padStart(2, "0")}`;
+}
+
+/** Generate a Cloudinary thumbnail URL from a video URL */
+function getThumbUrl(url: string): string {
+  // Insert transformation: grab frame at 2s, 600px wide, JPG format
+  return url.replace(/\/upload\/(f_mp4\/)?/, "/upload/so_2,w_600,c_fill,f_jpg,q_80/");
 }
 
 /* ─────────────────────────────────────────────────────────
@@ -193,7 +226,7 @@ export default function MediaSection() {
 }
 
 /* ─────────────────────────────────────────────────────────
-   MEDIA CARD — video thumbnail with lazy loading
+   MEDIA CARD — Cloudinary thumbnail + video preview on hover
    ───────────────────────────────────────────────────────── */
 function MediaCard({
   project,
@@ -206,15 +239,25 @@ function MediaCard({
 }) {
   const [isHovering, setIsHovering] = useState(false);
   const [duration, setDuration] = useState<string>("--:--:--:--");
-  const [thumbReady, setThumbReady] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const thumbUrl = getThumbUrl(project.url);
 
   const handleMetadata = useCallback(() => {
     if (videoRef.current) {
       setDuration(formatDuration(videoRef.current.duration));
-      setThumbReady(true);
     }
   }, []);
+
+  /* Play preview on hover, pause on leave */
+  useEffect(() => {
+    if (!videoRef.current) return;
+    if (isHovering) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play().catch(() => {});
+    } else {
+      videoRef.current.pause();
+    }
+  }, [isHovering]);
 
   return (
     <motion.div
@@ -225,23 +268,27 @@ function MediaCard({
       className="flex flex-col bg-deep border border-border group interactive cursor-none relative transition-shadow duration-300 hover:shadow-[0_0_16px_rgba(232,160,69,0.25)] hover:border-amber"
     >
       <div className="aspect-video w-full relative overflow-hidden bg-deep">
-        {/* Video Thumbnail — preload metadata only, lazy */}
-        <video
-          ref={videoRef}
-          src={`/works/${project.filename}`}
-          preload="metadata"
-          muted
-          playsInline
-          onLoadedMetadata={handleMetadata}
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${thumbReady ? "opacity-100" : "opacity-0"}`}
+        {/* Static Cloudinary thumbnail */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={thumbUrl}
+          alt={project.title}
+          loading="lazy"
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${isHovering ? "opacity-0" : "opacity-100"}`}
         />
 
-        {/* Fallback while thumbnail loads */}
-        {!thumbReady && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-6 h-6 border-2 border-amber border-t-transparent animate-spin" style={{ borderRadius: "50%" }} />
-          </div>
-        )}
+        {/* Video preview — loads & plays only on hover */}
+        <video
+          ref={videoRef}
+          src={project.url}
+          preload="metadata"
+          crossOrigin="anonymous"
+          muted
+          playsInline
+          loop
+          onLoadedMetadata={handleMetadata}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${isHovering ? "opacity-100" : "opacity-0"}`}
+        />
 
         {/* Duration badge */}
         <div className="absolute bottom-2 right-2 bg-black/80 px-1.5 py-0.5 font-mono text-[10px] text-primary z-10">
@@ -259,9 +306,9 @@ function MediaCard({
             scale: isHovering ? 1 : 0.8,
           }}
           transition={{ duration: 0.2 }}
-          className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-[2px] z-10"
+          className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none"
         >
-          <div className="w-14 h-14 border-2 border-amber flex items-center justify-center text-amber" style={{ borderRadius: "50%" }}>
+          <div className="w-14 h-14 border-2 border-amber flex items-center justify-center text-amber bg-black/30" style={{ borderRadius: "50%" }}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="none">
               <polygon points="6 3 20 12 6 21 6 3" />
             </svg>
@@ -280,7 +327,7 @@ function MediaCard({
       {/* File info bar */}
       <div className="p-2.5 border-t border-border flex items-center justify-between group-hover:bg-raised transition-colors">
         <div className="flex flex-col gap-0.5 min-w-0">
-          <span className="font-mono text-xs text-primary truncate">{project.filename}</span>
+          <span className="font-mono text-xs text-primary truncate">{project.title}</span>
           <span className="font-mono text-[10px] text-muted truncate">{project.category}</span>
         </div>
         <div className="w-2 h-2 bg-border group-hover:bg-green-tc transition-colors shrink-0 ml-2" style={{ borderRadius: "50%" }} />
@@ -305,6 +352,8 @@ function ProgramMonitor({
   const [currentTime, setCurrentTime] = useState("00:00:00:00");
   const [totalDuration, setTotalDuration] = useState("00:00:00:00");
   const [progress, setProgress] = useState(0);
+  const [aspectRatio, setAspectRatio] = useState(16 / 9);
+  const isPortrait = aspectRatio < 1;
 
   /* ESC to close */
   useEffect(() => {
@@ -342,6 +391,9 @@ function ProgramMonitor({
   const handleLoadedMetadata = useCallback(() => {
     if (videoRef.current) {
       setTotalDuration(formatDuration(videoRef.current.duration));
+      const w = videoRef.current.videoWidth;
+      const h = videoRef.current.videoHeight;
+      if (w && h) setAspectRatio(w / h);
     }
   }, []);
 
@@ -368,7 +420,9 @@ function ProgramMonitor({
         exit={{ scale: 0.92, opacity: 0, y: 30 }}
         transition={{ type: "spring", damping: 30, stiffness: 350 }}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-5xl bg-panel border border-border flex flex-col max-h-[95vh] overflow-hidden"
+        className={`bg-panel border border-border flex flex-col max-h-[95vh] overflow-hidden transition-all duration-300 ${
+          isPortrait ? "w-full max-w-md" : "w-full max-w-5xl"
+        }`}
       >
         {/* Title Bar */}
         <div className="flex items-center justify-between px-4 py-2 bg-raised border-b border-border shrink-0">
@@ -383,7 +437,7 @@ function ProgramMonitor({
               Program Monitor
             </span>
             <span className="font-mono text-[10px] text-muted ml-2">
-              {project.filename}
+              {project.title}
             </span>
           </div>
           <button
@@ -397,15 +451,17 @@ function ProgramMonitor({
           </button>
         </div>
 
-        {/* Video Area */}
+        {/* Video Area — adapts to native video ratio */}
         <div
-          className="relative w-full bg-black aspect-video cursor-none interactive"
+          className="relative w-full bg-black cursor-none interactive"
+          style={{ aspectRatio: `${aspectRatio}` }}
           onClick={togglePlayback}
         >
           <video
             ref={videoRef}
-            src={`/works/${project.filename}`}
+            src={project.url}
             preload="metadata"
+            crossOrigin="anonymous"
             playsInline
             onTimeUpdate={handleTimeUpdate}
             onLoadedMetadata={handleLoadedMetadata}
