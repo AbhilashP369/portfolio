@@ -1,28 +1,28 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import ArtCard from "./ArtCard";
+import ArtCard, { ArtItem } from "./ArtCard";
 import ArtLightbox from "./ArtLightbox";
 
-export default function ArtCarousel({ items }: { items: any[] }) {
+export default function ArtCarousel({ items }: { items: ArtItem[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
-  const [selectedItem, setSelectedItem] = useState<any>(null);
+  const [selectedItem, setSelectedItem] = useState<ArtItem | null>(null);
 
   // Reset index when items (filters) change
   useEffect(() => {
     setCurrentIndex(0);
   }, [items]);
 
-  const slideLeft = () => {
+  const slideLeft = useCallback(() => {
     setDirection(-1);
     setCurrentIndex((prev) => (prev === 0 ? items.length - 1 : prev - 1));
-  };
+  }, [items.length]);
 
-  const slideRight = () => {
+  const slideRight = useCallback(() => {
     setDirection(1);
     setCurrentIndex((prev) => (prev === items.length - 1 ? 0 : prev + 1));
-  };
+  }, [items.length]);
 
   // Keyboard navigation for carousel
   useEffect(() => {
@@ -33,7 +33,7 @@ export default function ArtCarousel({ items }: { items: any[] }) {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [selectedItem, items.length]);
+  }, [selectedItem, slideLeft, slideRight]);
 
   if (!items || items.length === 0) return null;
 

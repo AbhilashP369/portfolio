@@ -1,7 +1,9 @@
 "use client";
 import SoftwareIcon from "./SoftwareIcon";
 
-export default function ArtCard({ item, onClick }: { item: any, onClick: () => void }) {
+export type ArtItem = { id: number; title: string; category: string; description: string; image: string; medium: string; year: string; orientation?: string };
+
+export default function ArtCard({ item, onClick }: { item: ArtItem, onClick: () => void }) {
   const isGradient = item.image.startsWith("linear-gradient");
   
   // Set dimensions based on orientation flag, or let it default

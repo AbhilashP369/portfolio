@@ -2,8 +2,9 @@
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import SoftwareIcon from "./SoftwareIcon";
+import { ArtItem } from "./ArtCard";
 
-export default function ArtLightbox({ isOpen, onClose, item, slideLeft, slideRight }: { isOpen: boolean, onClose: () => void, item: any, slideLeft?: () => void, slideRight?: () => void }) {
+export default function ArtLightbox({ isOpen, onClose, item, slideLeft, slideRight }: { isOpen: boolean, onClose: () => void, item: ArtItem, slideLeft?: () => void, slideRight?: () => void }) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
