@@ -35,42 +35,66 @@ export default function BeforeAfterSlider({ beforeImage, afterImage }: { beforeI
     };
   }, []);
 
-  const beforeStyle = beforeImage.startsWith("linear-gradient") || beforeImage.startsWith("radial-gradient")
-    ? { background: beforeImage }
-    : { backgroundImage: `url(${beforeImage})` };
-
-  const afterStyle = afterImage.startsWith("linear-gradient") || afterImage.startsWith("radial-gradient")
-    ? { background: afterImage }
-    : { backgroundImage: `url(${afterImage})` };
+  const isGradient = beforeImage.startsWith("linear-gradient") || beforeImage.startsWith("radial-gradient");
 
   return (
     <div 
       ref={containerRef}
-      className="relative w-full aspect-[4/3] sm:aspect-square md:aspect-[4/3] overflow-hidden select-none cursor-ew-resize bg-panel border border-border interactive"
+      className="relative w-full overflow-hidden select-none cursor-ew-resize bg-panel border border-border interactive"
       onMouseDown={(e) => { setIsDragging(true); handleMove(e.clientX); }}
       onTouchStart={(e) => { setIsDragging(true); handleMove(e.touches[0].clientX); }}
       onMouseMove={onMouseMove}
       onTouchMove={onTouchMove}
     >
-      {/* Before Image (Background) */}
-      <div 
-        className="absolute inset-0 w-full h-full bg-cover bg-center pointer-events-none"
-        style={beforeStyle}
-      />
+      {/* Base Layer: Determines container aspect ratio using the After image (invisible) */}
+      {isGradient ? (
+        <div className="w-full aspect-[4/3] pointer-events-none" style={{ background: afterImage }} />
+      ) : (
+        /* eslint-disable-next-line @next/next/no-img-element */
+        <img 
+          src={afterImage} 
+          alt="Base Size" 
+          className="w-full h-auto block pointer-events-none opacity-0" 
+        />
+      )}
+
+      {/* Before Image (Absolute background) */}
+      <div className="absolute inset-0 w-full h-full pointer-events-none bg-black">
+        {isGradient ? (
+          <div className="w-full h-full" style={{ background: beforeImage }} />
+        ) : (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img 
+            src={beforeImage} 
+            alt="Before" 
+            className="w-full h-full object-contain" 
+          />
+        )}
+      </div>
       
       {/* Before Label */}
       <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 z-10 pointer-events-none">
         <span className="font-mono text-[11px] text-white tracking-widest uppercase">Before</span>
       </div>
 
-      {/* After Image (Clipped) */}
+      {/* After Image (Clipped Overlay) */}
       <div 
-        className="absolute inset-0 h-full bg-cover bg-center pointer-events-none"
+        className="absolute inset-0 w-full h-full pointer-events-none"
         style={{ 
-          clipPath: `polygon(${sliderPosition}% 0, 100% 0, 100% 100%, ${sliderPosition}% 100%)`,
-          ...afterStyle
+          clipPath: `polygon(${sliderPosition}% 0, 100% 0, 100% 100%, ${sliderPosition}% 100%)`
         }}
-      />
+      >
+        {isGradient ? (
+          <div className="w-full h-full" style={{ background: afterImage }} />
+        ) : (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img 
+            src={afterImage} 
+            alt="After" 
+            className="absolute inset-0 w-full h-full object-cover" 
+          />
+        )}
+      </div>
       
       {/* After Label */}
       <div className="absolute top-3 right-3 bg-amber/90 backdrop-blur-md px-3 py-1 rounded-full border border-amber z-10 shadow-[0_0_10px_rgba(232,160,69,0.3)] pointer-events-none">
