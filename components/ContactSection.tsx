@@ -61,9 +61,15 @@ export default function ContactSection() {
             
             <motion.div variants={itemVariants} className="flex flex-col gap-1">
               <span className="text-[10px] font-mono text-muted uppercase">Instagram:</span>
-              <div className="h-8 border border-border bg-deep px-2 flex items-center text-sm font-sans text-amber interactive cursor-none">
-                <a href="https://instagram.com/_abhilazh__" target="_blank" rel="noopener noreferrer" className="w-full h-full flex items-center">@_abhilazh__</a>
-              </div>
+              <a 
+                href="https://www.instagram.com/_abhilazh__/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="h-10 border border-border bg-deep px-3 flex items-center gap-3 text-sm font-sans text-amber interactive cursor-none hover:bg-raised hover:border-amber/50 transition-all group"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                @_abhilazh__
+              </a>
             </motion.div>
           </div>
           
