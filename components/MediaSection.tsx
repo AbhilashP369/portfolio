@@ -140,6 +140,7 @@ const projects: Project[] = [
    HELPERS
    ───────────────────────────────────────────────────────── */
 function formatDuration(seconds: number): string {
+  if (!seconds || isNaN(seconds) || !isFinite(seconds)) return "00:00:00:00";
   const h = Math.floor(seconds / 3600);
   const m = Math.floor((seconds % 3600) / 60);
   const s = Math.floor(seconds % 60);
@@ -253,10 +254,16 @@ function MediaCard({
   const thumbUrl = getThumbUrl(project.url);
 
   const handleMetadata = useCallback(() => {
-    if (videoRef.current) {
+    if (videoRef.current && videoRef.current.duration) {
       setDuration(formatDuration(videoRef.current.duration));
     }
   }, []);
+
+  useEffect(() => {
+    if (videoRef.current && videoRef.current.readyState >= 1) {
+      handleMetadata();
+    }
+  }, [handleMetadata]);
 
   /* Play preview on hover, pause on leave */
   useEffect(() => {
@@ -297,6 +304,7 @@ function MediaCard({
           playsInline
           loop
           onLoadedMetadata={handleMetadata}
+          onDurationChange={handleMetadata}
           className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${isHovering ? "opacity-100" : "opacity-0"}`}
         />
 
@@ -474,6 +482,7 @@ function ProgramMonitor({
             playsInline
             onTimeUpdate={handleTimeUpdate}
             onLoadedMetadata={handleLoadedMetadata}
+            onDurationChange={handleLoadedMetadata}
             onEnded={() => setIsPlaying(false)}
             className="w-full max-h-[45vh] md:max-h-[65vh] object-contain"
           />

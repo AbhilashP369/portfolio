@@ -247,7 +247,7 @@ export default function ContactSection() {
             <motion.div variants={itemVariants} className="flex flex-col gap-1">
               <span className="text-[8px] font-syne text-[#555] uppercase tracking-wide">Duration:</span>
               <div className="h-8 border border-[#2a2a2a] bg-[#1a1a1a] px-[10px] flex items-center text-[10px] font-syne text-[#ccc] hover:border-[#FF4D00] transition-colors rounded-none show-cursor">
-                00:00:00:00 (Fresher / Freelance)
+                00:00:00:00 (Freelancer)
               </div>
             </motion.div>
 
