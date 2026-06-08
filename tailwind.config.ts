@@ -25,6 +25,7 @@ const config: Config = {
         mono: ['var(--font-jetbrains)', 'monospace'],
         sans: ['var(--font-dm-sans)', 'sans-serif'],
         bebas: ['var(--font-bebas)', 'sans-serif'],
+        syne: ['var(--font-syne-mono)', 'monospace'],
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

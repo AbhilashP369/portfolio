@@ -421,7 +421,7 @@ function ProgramMonitor({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 md:p-8"
+      className="fixed inset-0 z-[110] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 md:p-8 show-cursor"
       onClick={onClose}
     >
       <motion.div
@@ -452,7 +452,7 @@ function ProgramMonitor({
           </div>
           <button
             onClick={onClose}
-            className="w-7 h-7 flex items-center justify-center text-muted hover:text-primary hover:bg-border transition-colors interactive cursor-none"
+            className="w-7 h-7 flex items-center justify-center text-muted hover:text-primary hover:bg-border transition-colors interactive"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <line x1="18" y1="6" x2="6" y2="18" />
@@ -463,7 +463,7 @@ function ProgramMonitor({
 
         {/* Video Area — responsive scaling with max-height to protect controls */}
         <div
-          className="relative w-full bg-black cursor-none interactive flex items-center justify-center shrink-0"
+          className="relative w-full bg-black interactive flex items-center justify-center shrink-0"
           onClick={togglePlayback}
         >
           <video
@@ -507,7 +507,7 @@ function ProgramMonitor({
           {/* Progress Bar */}
           <div
             ref={progressRef}
-            className="w-full h-2 bg-deep border border-border relative cursor-none interactive group"
+            className="w-full h-2 bg-deep border border-border relative interactive group"
             onClick={handleSeek}
           >
             <motion.div
@@ -526,7 +526,7 @@ function ProgramMonitor({
               {/* Skip Back */}
               <button
                 onClick={() => { if (videoRef.current) videoRef.current.currentTime = Math.max(0, videoRef.current.currentTime - 5); }}
-                className="text-muted hover:text-primary transition-colors interactive cursor-none"
+                className="text-muted hover:text-primary transition-colors interactive"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <polygon points="11 19 2 12 11 5 11 19" />
@@ -537,7 +537,7 @@ function ProgramMonitor({
               {/* Play / Pause */}
               <button
                 onClick={togglePlayback}
-                className="w-9 h-9 flex items-center justify-center border border-border bg-deep text-amber hover:bg-raised hover:border-amber transition-colors interactive cursor-none"
+                className="w-9 h-9 flex items-center justify-center border border-border bg-deep text-amber hover:bg-raised hover:border-amber transition-colors interactive"
               >
                 {isPlaying ? (
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none">
@@ -554,7 +554,7 @@ function ProgramMonitor({
               {/* Skip Forward */}
               <button
                 onClick={() => { if (videoRef.current) videoRef.current.currentTime = Math.min(videoRef.current.duration, videoRef.current.currentTime + 5); }}
-                className="text-muted hover:text-primary transition-colors interactive cursor-none"
+                className="text-muted hover:text-primary transition-colors interactive"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <polygon points="13 19 22 12 13 5 13 19" />

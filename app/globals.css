@@ -29,6 +29,11 @@ body {
   user-select: none;
 }
 
+/* Force default cursor on specific elements */
+.show-cursor, .show-cursor * {
+  cursor: auto !important;
+}
+
 /* Scanline effect */
 .scanlines {
   position: fixed;
@@ -62,6 +67,15 @@ body {
 }
 ::-webkit-scrollbar-corner {
   background: var(--bg-deep);
+}
+
+/* Playhead animation for About section monitor */
+@keyframes playhead {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+.animate-playhead {
+  animation: playhead 10s linear infinite;
 }
 
 @layer utilities {
