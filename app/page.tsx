@@ -13,6 +13,7 @@ import ToolsSection from "@/components/ToolsSection";
 import ExperienceSection from "@/components/ExperienceSection";
 import EducationSection from "@/components/EducationSection";
 import ContactSection from "@/components/ContactSection";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
@@ -97,6 +98,7 @@ export default function Home() {
       </div>
       
       <BottomStatusBar />
+      <Footer />
     </main>
   );
 }
