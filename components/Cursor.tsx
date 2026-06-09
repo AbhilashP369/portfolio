@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 export default function Cursor() {
@@ -8,6 +9,7 @@ export default function Cursor() {
   const [isHovering, setIsHovering] = useState(false);
   const [isClicking, setIsClicking] = useState(false);
   const [label, setLabel] = useState("");
+  const [mounted, setMounted] = useState(false);
 
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
@@ -16,6 +18,10 @@ export default function Cursor() {
   const springConfig = { stiffness: 150, damping: 18 };
   const smoothMouseX = useSpring(mouseX, springConfig);
   const smoothMouseY = useSpring(mouseY, springConfig);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const updateMousePosition = (e: MouseEvent) => {
@@ -69,10 +75,10 @@ export default function Cursor() {
     };
   }, [mouseX, mouseY, isVisible]);
 
-  if (!isVisible) return null;
+  if (!isVisible || !mounted) return null;
 
-  return (
-    <div className="fixed inset-0 pointer-events-none z-[100]">
+  const cursorContent = (
+    <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 2147483647 }}>
       {/* Inner Dot - Instant follow */}
       <motion.div
         className="fixed top-0 left-0 w-1.5 h-1.5 bg-amber rounded-full"
@@ -101,7 +107,7 @@ export default function Cursor() {
           borderColor: isHovering ? "white" : "var(--amber)",
         }}
         animate={{
-          scale: isClicking ? 0.6 : isHovering ? 1.57 : 1, // 1.57 * 28 ≈ 44px
+          scale: isClicking ? 0.6 : isHovering ? 1.57 : 1,
         }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
       />
@@ -122,4 +128,7 @@ export default function Cursor() {
       </motion.div>
     </div>
   );
+
+  return createPortal(cursorContent, document.body);
 }
+

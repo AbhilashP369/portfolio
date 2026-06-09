@@ -2,6 +2,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import SoftwareIcon from "./SoftwareIcon";
+import KeyframeGrowth from "./KeyframeGrowth";
 
 export default function ToolsSection() {
   const tools = [
@@ -23,7 +24,7 @@ export default function ToolsSection() {
 
   return (
     <section 
-      className="relative w-full min-h-screen flex flex-col md:flex-row p-4 pb-20 gap-2 overflow-hidden"
+      className="relative w-full min-h-screen flex flex-col lg:flex-row p-4 pb-20 gap-2 overflow-hidden"
       data-cursor-label="INSPECT"
     >
       <div className="flex-1 bg-panel border border-border flex flex-col p-2">
@@ -39,34 +40,8 @@ export default function ToolsSection() {
         </div>
       </div>
       
-      <div className="hidden md:flex flex-col w-1/3 bg-panel border border-border p-2">
-        <div className="font-mono text-sm text-primary uppercase border-b border-border pb-1 tracking-widest mb-4">
-          Keyframe Interpolation
-        </div>
-        <div className="flex-1 relative flex items-center justify-center p-4">
-           {/* Abstract graph representation */}
-           <div className="w-full h-48 border-l border-b border-border relative">
-             <motion.svg className="absolute inset-0 w-full h-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 100 100">
-               <motion.path 
-                 d="M 0 100 C 50 100, 50 0, 100 0" 
-                 fill="none" 
-                 stroke="var(--amber)" 
-                 strokeWidth="2"
-                 initial={{ pathLength: 0 }}
-                 whileInView={{ pathLength: 1 }}
-                 viewport={{ once: true, margin: "-100px" }}
-                 transition={{ duration: 1.5, ease: "easeInOut" }}
-               />
-               <circle cx="0" cy="100" r="3" fill="var(--primary)" />
-               <circle cx="100" cy="0" r="3" fill="var(--primary)" />
-               
-               <line x1="0" y1="100" x2="50" y2="100" stroke="var(--border-lit)" strokeWidth="1" />
-               <line x1="100" y1="0" x2="50" y2="0" stroke="var(--border-lit)" strokeWidth="1" />
-             </motion.svg>
-             <div className="absolute -bottom-5 left-0 text-[10px] font-mono text-muted">Temporal</div>
-             <div className="absolute top-0 -left-12 text-[10px] font-mono text-muted -rotate-90 origin-right">Spatial</div>
-           </div>
-        </div>
+      <div className="flex flex-col w-full lg:w-[35%] h-[220px] md:h-[280px] lg:h-auto shrink-0 z-10">
+        <KeyframeGrowth />
       </div>
     </section>
   );

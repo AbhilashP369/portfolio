@@ -381,6 +381,7 @@ function ProgramMonitor({
         e.preventDefault();
         togglePlayback();
       }
+      if (e.key === "f") handleFullscreen();
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
@@ -422,6 +423,15 @@ function ProgramMonitor({
     videoRef.current.currentTime = ratio * videoRef.current.duration;
   }, []);
 
+  const handleFullscreen = useCallback(() => {
+    if (!videoRef.current) return;
+    if (videoRef.current.requestFullscreen) {
+      videoRef.current.requestFullscreen();
+    } else if ((videoRef.current as HTMLVideoElement & { webkitEnterFullscreen?: () => void }).webkitEnterFullscreen) {
+      (videoRef.current as HTMLVideoElement & { webkitEnterFullscreen: () => void }).webkitEnterFullscreen();
+    }
+  }, []);
+
   return (
     <motion.div
       key="program-monitor-overlay"
@@ -429,7 +439,7 @@ function ProgramMonitor({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
-      className="fixed inset-0 z-[110] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 md:p-8 show-cursor"
+      className="fixed inset-0 z-[110] flex items-start justify-center bg-black/90 backdrop-blur-sm p-4 md:p-8 overflow-y-auto cursor-none"
       onClick={onClose}
     >
       <motion.div
@@ -438,7 +448,7 @@ function ProgramMonitor({
         exit={{ scale: 0.92, opacity: 0, y: 30 }}
         transition={{ type: "spring", damping: 30, stiffness: 350 }}
         onClick={(e) => e.stopPropagation()}
-        className={`bg-panel border border-border flex flex-col max-h-[95vh] md:max-h-[90vh] overflow-hidden transition-all duration-300 ${
+        className={`bg-panel border border-border flex flex-col my-auto transition-all duration-300 ${
           isPortrait ? "w-full max-w-md" : "w-full max-w-5xl"
         }`}
       >
@@ -458,20 +468,37 @@ function ProgramMonitor({
               {project.title}
             </span>
           </div>
-          <button
-            onClick={onClose}
-            className="w-7 h-7 flex items-center justify-center text-muted hover:text-primary hover:bg-border transition-colors interactive"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          </button>
+          <div className="flex items-center gap-1">
+            {/* Fullscreen Button */}
+            <button
+              onClick={handleFullscreen}
+              className="w-7 h-7 flex items-center justify-center text-muted hover:text-amber hover:bg-border transition-colors interactive"
+              title="Fullscreen"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M8 3H5a2 2 0 0 0-2 2v3" />
+                <path d="M21 8V5a2 2 0 0 0-2-2h-3" />
+                <path d="M3 16v3a2 2 0 0 0 2 2h3" />
+                <path d="M16 21h3a2 2 0 0 0 2-2v-3" />
+              </svg>
+            </button>
+            {/* Close Button */}
+            <button
+              onClick={onClose}
+              className="w-7 h-7 flex items-center justify-center text-muted hover:text-primary hover:bg-border transition-colors interactive"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+          </div>
         </div>
 
-        {/* Video Area — responsive scaling with max-height to protect controls */}
+        {/* Video Area — actual aspect ratio */}
         <div
-          className="relative w-full bg-black interactive flex items-center justify-center shrink-0"
+          className="relative w-full bg-black interactive flex items-center justify-center"
+          style={{ aspectRatio: String(aspectRatio) }}
           onClick={togglePlayback}
         >
           <video
@@ -484,7 +511,7 @@ function ProgramMonitor({
             onLoadedMetadata={handleLoadedMetadata}
             onDurationChange={handleLoadedMetadata}
             onEnded={() => setIsPlaying(false)}
-            className="w-full max-h-[45vh] md:max-h-[65vh] object-contain"
+            className="w-full h-full object-contain"
           />
 
           {/* Center play button when paused */}
@@ -570,6 +597,20 @@ function ProgramMonitor({
                   <polygon points="2 19 11 12 2 5 2 19" />
                 </svg>
               </button>
+
+              {/* Fullscreen (in controls too) */}
+              <button
+                onClick={handleFullscreen}
+                className="text-muted hover:text-amber transition-colors interactive"
+                title="Fullscreen (F)"
+              >
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M8 3H5a2 2 0 0 0-2 2v3" />
+                  <path d="M21 8V5a2 2 0 0 0-2-2h-3" />
+                  <path d="M3 16v3a2 2 0 0 0 2 2h3" />
+                  <path d="M16 21h3a2 2 0 0 0 2-2v-3" />
+                </svg>
+              </button>
             </div>
 
             {/* Timecode */}
@@ -582,7 +623,7 @@ function ProgramMonitor({
         </div>
 
         {/* Project Details */}
-        <div className="border-t border-border px-4 py-4 bg-panel overflow-y-auto shrink-0">
+        <div className="border-t border-border px-4 py-4 bg-panel">
           <div className="flex flex-col md:flex-row md:items-start gap-4">
             <div className="flex-1 min-w-0">
               <h3 className="font-sans text-lg text-primary mb-1">{project.title}</h3>
