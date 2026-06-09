@@ -2,31 +2,31 @@ export const artworks = [
   {
     id: 1,
     image: "/images/art/IMG_0808.png",
-    title: "Nightfall Event Poster",
+    title: "Nightfall",
     category: "POSTERS",
-    medium: "Adobe Illustrator",
+    medium: "Adobe Photoshop & Illustrator",
     year: "2024",
-    description: "Event poster for a music night. Bold typography with dark cinematic tones.",
+    description: "Official poster design for the 'Nightfall' short film. Features dramatic lighting, cinematic composition, and bold title typography.",
     orientation: "portrait"
   },
   {
     id: 2,
     image: "/images/art/IMG_2887.jpeg",
     title: "Abstract Thoughts",
-    category: "PAINTINGS",
-    medium: "Acrylic on Canvas",
+    category: "DIGITAL ART",
+    medium: "Adobe Photoshop & Illustrator",
     year: "2023",
-    description: "Abstract expressionist piece exploring contrast and emotion.",
+    description: "Cover artwork for the 'Abstract Thoughts' reel series. Designed to stand out on social media with high-contrast visuals.",
     orientation: "portrait"
   },
   {
     id: 3,
     image: "/images/art/IMG_8821.png",
     title: "Neon Dreams",
-    category: "DIGITAL ART",
-    medium: "Procreate",
+    category: "POSTERS",
+    medium: "Adobe Photoshop & Illustrator",
     year: "2024",
-    description: "Digital illustration with neon and dark atmospheric tones.",
+    description: "High-energy promotional poster for the 'Neon Dreams' college fest. Uses vibrant neon colors, glitch effects, and modern layout techniques.",
     orientation: "portrait"
   },
   {
