@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 export default function KeyframeGrowth() {
   const containerRef = useRef(null);
@@ -121,9 +121,6 @@ export default function KeyframeGrowth() {
               key={i}
               className="absolute group z-20 cursor-none interactive"
               style={{ left: `${kf.x}%`, top: `${kf.y}%`, transform: 'translate(-50%, -50%)' }}
-              onMouseEnter={() => setHoveredIdx(i)}
-              onMouseLeave={() => setHoveredIdx(null)}
-              onClick={() => setHoveredIdx(i)}
             >
               <motion.div
                 initial={{ scale: 0, opacity: 0 }}
