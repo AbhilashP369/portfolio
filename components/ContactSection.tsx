@@ -8,7 +8,7 @@ export default function ContactSection() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   
   const [toast, setToast] = useState<{ show: boolean, message: string }>({ show: false, message: "" });
-  const [exportState, setExportState] = useState<"idle" | "exporting" | "exported">("idle");
+  const [downloadState, setDownloadState] = useState<"idle" | "downloading" | "downloaded">("idle");
 
   const showToast = (message: string) => {
     setToast({ show: true, message });
@@ -31,9 +31,9 @@ export default function ContactSection() {
     showToast("Phone number copied ✓");
   };
 
-  const handleExport = () => {
-    if (exportState !== "idle") return;
-    setExportState("exporting");
+  const handleDownload = () => {
+    if (downloadState !== "idle") return;
+    setDownloadState("downloading");
     
     // Simulate progress
     const startTime = Date.now();
@@ -45,7 +45,7 @@ export default function ContactSection() {
       if (elapsed < duration) {
         requestAnimationFrame(animateProgress);
       } else {
-        setExportState("exported");
+        setDownloadState("downloaded");
         
         // Trigger download
         const a = document.createElement("a");
@@ -55,7 +55,7 @@ export default function ContactSection() {
         a.click();
         document.body.removeChild(a);
         
-        setTimeout(() => setExportState("idle"), 1000);
+        setTimeout(() => setDownloadState("idle"), 1000);
       }
     };
     
@@ -335,36 +335,36 @@ export default function ContactSection() {
               </a>
               
               <motion.button 
-                onClick={handleExport}
+                onClick={handleDownload}
                 whileInView={{ boxShadow: ["0 0 0px rgba(255,77,0,0)", "0 0 20px rgba(255,77,0,0.3)", "0 0 0px rgba(255,77,0,0)"] }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ delay: 0.8, duration: 1 }}
                 className="relative h-8 bg-[#FF4D00] text-[#0E0E0E] font-syne text-[10px] font-bold hover:bg-[#ff5d15] transition-colors overflow-hidden flex items-center justify-center show-cursor"
               >
                 <AnimatePresence mode="wait">
-                  {exportState === "idle" && (
+                  {downloadState === "idle" && (
                     <motion.span key="idle" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                      Export Resume.pdf
+                      Download Resume.pdf
                     </motion.span>
                   )}
-                  {exportState === "exporting" && (
-                    <motion.div key="exporting" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-2">
+                  {downloadState === "downloading" && (
+                    <motion.div key="downloading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-2">
                       <svg className="animate-spin h-3 w-3 text-[#0E0E0E]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
-                      Exporting...
+                      Downloading...
                     </motion.div>
                   )}
-                  {exportState === "exported" && (
-                    <motion.span key="exported" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-[#28C840] drop-shadow-md">
-                      ✓ Exported!
+                  {downloadState === "downloaded" && (
+                    <motion.span key="downloaded" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-[#28C840] drop-shadow-md">
+                      ✓ Downloaded!
                     </motion.span>
                   )}
                 </AnimatePresence>
 
                 {/* Progress Bar */}
-                {exportState === "exporting" && (
+                {downloadState === "downloading" && (
                   <div className="absolute bottom-0 left-0 h-[2px] bg-[#0E0E0E] w-full origin-left opacity-30">
                     <motion.div 
                       className="h-full bg-white"
