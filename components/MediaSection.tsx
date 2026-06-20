@@ -118,7 +118,7 @@ const projects: Project[] = [
   },
   {
     url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1781939393/IMG_2899_hb1a1z.mp4",
-    title: "Mood Film",
+    title: "Vacmate Talk",
     category: "Short-Form · Creative",
     description:
       "A creative short-form film with stylized cuts, mood-driven transitions, and dynamic color grading.",
