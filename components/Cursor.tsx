@@ -10,6 +10,7 @@ export default function Cursor() {
   const [isClicking, setIsClicking] = useState(false);
   const [label, setLabel] = useState("");
   const [mounted, setMounted] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
@@ -21,9 +22,32 @@ export default function Cursor() {
 
   useEffect(() => {
     setMounted(true);
+    
+    const mediaQuery = window.matchMedia("(min-width: 768px)");
+    setIsDesktop(mediaQuery.matches);
+
+    const handleResize = (e: MediaQueryListEvent) => {
+      setIsDesktop(e.matches);
+    };
+
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener("change", handleResize);
+    } else {
+      mediaQuery.addListener(handleResize);
+    }
+
+    return () => {
+      if (mediaQuery.removeEventListener) {
+        mediaQuery.removeEventListener("change", handleResize);
+      } else {
+        mediaQuery.removeListener(handleResize);
+      }
+    };
   }, []);
 
   useEffect(() => {
+    if (!isDesktop) return;
+
     const updateMousePosition = (e: MouseEvent) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
@@ -73,9 +97,9 @@ export default function Cursor() {
       window.removeEventListener("mouseup", handleMouseUp);
       window.removeEventListener("mouseover", handleMouseOver);
     };
-  }, [mouseX, mouseY, isVisible]);
+  }, [mouseX, mouseY, isVisible, isDesktop]);
 
-  if (!isVisible || !mounted) return null;
+  if (!isVisible || !mounted || !isDesktop) return null;
 
   const cursorContent = (
     <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 2147483647 }}>

@@ -49,8 +49,8 @@ export default function ContactSection() {
         
         // Trigger download
         const a = document.createElement("a");
-        a.href = "/abhilash-cv.pdf";
-        a.download = "abhilash-cv.pdf";
+        a.href = "/abhilash-resume.pdf";
+        a.download = "abhilash-resume.pdf";
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -344,7 +344,7 @@ export default function ContactSection() {
                 <AnimatePresence mode="wait">
                   {exportState === "idle" && (
                     <motion.span key="idle" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                      Export CV.pdf
+                      Export Resume.pdf
                     </motion.span>
                   )}
                   {exportState === "exporting" && (

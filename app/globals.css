@@ -18,8 +18,19 @@
 
 * {
   box-sizing: border-box;
-  cursor: none !important;
   border-radius: 0 !important;
+}
+
+@media (min-width: 768px) {
+  * {
+    cursor: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .cursor-none, [class*="cursor-none"] {
+    cursor: auto !important;
+  }
 }
 
 body {
