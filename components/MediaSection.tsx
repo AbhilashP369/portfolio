@@ -116,6 +116,33 @@ const projects: Project[] = [
     software: ["Premiere Pro", "After Effects"],
     year: "2026",
   },
+  {
+    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1781939393/IMG_2899_hb1a1z.mp4",
+    title: "Mood Film",
+    category: "Short-Form · Creative",
+    description:
+      "A creative short-form film with stylized cuts, mood-driven transitions, and dynamic color grading.",
+    software: ["Premiere Pro", "After Effects"],
+    year: "2026",
+  },
+  {
+    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1781938683/ormakalmotionvideo_dga9yz.mp4",
+    title: "Ormakal Motion Video",
+    category: "Motion Graphics · Cinematic",
+    description:
+      "A nostalgic and cinematic motion video blending storytelling elements, custom typography, and rich sound design.",
+    software: ["Premiere Pro", "After Effects"],
+    year: "2026",
+  },
+  {
+    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1781938581/messi_i9czni.mp4",
+    title: "Messi Tribute Edit",
+    category: "Short-Form · Sports",
+    description:
+      "A high-energy sports tribute edit celebrating Lionel Messi, beat-synced with impact sound effects and tracking graphics.",
+    software: ["Premiere Pro", "After Effects"],
+    year: "2026",
+  },
 ];
 
 /* ─────────────────────────────────────────────────────────
