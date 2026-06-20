@@ -27,13 +27,22 @@ const projects: Project[] = [
     year: "2026",
   },
   {
-    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1780727007/1flash_ftp9eb.mp4",
-    title: "Flash Edit",
-    category: "Short-Form · Reel",
+    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1781938581/messi_i9czni.mp4",
+    title: "Messi Tribute Edit",
+    category: "Short-Form · Sports",
     description:
-      "Quick-cut flash edit with rapid transitions, beat-synced drops, and high-impact visuals designed to stop the scroll.",
+      "A high-energy sports tribute edit celebrating Lionel Messi, beat-synced with impact sound effects and tracking graphics.",
     software: ["Premiere Pro", "After Effects"],
-    year: "2025",
+    year: "2026",
+  },
+  {
+    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1781938683/ormakalmotionvideo_dga9yz.mp4",
+    title: "Ormakal Motion Video",
+    category: "Motion Graphics · Cinematic",
+    description:
+      "A nostalgic and cinematic motion video blending storytelling elements, custom typography, and rich sound design.",
+    software: ["Premiere Pro", "After Effects"],
+    year: "2026",
   },
   {
     url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/f_mp4/v1780727043/cenimaticreel_mc98ht.mov",
@@ -45,11 +54,20 @@ const projects: Project[] = [
     year: "2026",
   },
   {
-    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1780727013/finaltripv_cmxxg4.mp4",
-    title: "Final Trip Edit",
-    category: "Cinematic · Travel",
+    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1780727007/1flash_ftp9eb.mp4",
+    title: "Flash Edit",
+    category: "Short-Form · Reel",
     description:
-      "A cinematic travel film capturing scenic landscapes and candid moments. Warm tones, atmospheric sound design, and smooth gimbal footage.",
+      "Quick-cut flash edit with rapid transitions, beat-synced drops, and high-impact visuals designed to stop the scroll.",
+    software: ["Premiere Pro", "After Effects"],
+    year: "2025",
+  },
+  {
+    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1781939393/IMG_2899_hb1a1z.mp4",
+    title: "Vacmate Talk",
+    category: "Short-Form · Creative",
+    description:
+      "A creative short-form film with stylized cuts, mood-driven transitions, and dynamic color grading.",
     software: ["Premiere Pro", "After Effects"],
     year: "2026",
   },
@@ -63,22 +81,13 @@ const projects: Project[] = [
     year: "2025",
   },
   {
-    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/f_mp4/v1780727394/promotioncollege_event_cyyai1.mov",
-    title: "College Event Promo",
-    category: "Promotional · Event",
+    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1780727013/finaltripv_cmxxg4.mp4",
+    title: "Final Trip Edit",
+    category: "Cinematic · Travel",
     description:
-      "High-energy promotional video for a college cultural event. Dynamic editing, crowd shots, and event branding packaged for social media.",
-    software: ["Premiere Pro", "Photoshop", "CapCut"],
-    year: "2026",
-  },
-  {
-    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1780727397/semm_vcjh35.mp4",
-    title: "Seminar Highlight",
-    category: "Short-Form · Event",
-    description:
-      "Tight seminar highlight reel capturing keynote moments, audience reactions, and behind-the-scenes energy.",
+      "A cinematic travel film capturing scenic landscapes and candid moments. Warm tones, atmospheric sound design, and smooth gimbal footage.",
     software: ["Premiere Pro", "After Effects"],
-    year: "2025",
+    year: "2026",
   },
   {
     url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/f_mp4/v1780727327/uniyarchapainting_cirics.mov",
@@ -117,31 +126,22 @@ const projects: Project[] = [
     year: "2026",
   },
   {
-    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1781939393/IMG_2899_hb1a1z.mp4",
-    title: "Vacmate Talk",
-    category: "Short-Form · Creative",
+    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/f_mp4/v1780727394/promotioncollege_event_cyyai1.mov",
+    title: "College Event Promo",
+    category: "Promotional · Event",
     description:
-      "A creative short-form film with stylized cuts, mood-driven transitions, and dynamic color grading.",
-    software: ["Premiere Pro", "After Effects"],
+      "High-energy promotional video for a college cultural event. Dynamic editing, crowd shots, and event branding packaged for social media.",
+    software: ["Premiere Pro", "Photoshop", "CapCut"],
     year: "2026",
   },
   {
-    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1781938683/ormakalmotionvideo_dga9yz.mp4",
-    title: "Ormakal Motion Video",
-    category: "Motion Graphics · Cinematic",
+    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1780727397/semm_vcjh35.mp4",
+    title: "Seminar Highlight",
+    category: "Short-Form · Event",
     description:
-      "A nostalgic and cinematic motion video blending storytelling elements, custom typography, and rich sound design.",
+      "Tight seminar highlight reel capturing keynote moments, audience reactions, and behind-the-scenes energy.",
     software: ["Premiere Pro", "After Effects"],
-    year: "2026",
-  },
-  {
-    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1781938581/messi_i9czni.mp4",
-    title: "Messi Tribute Edit",
-    category: "Short-Form · Sports",
-    description:
-      "A high-energy sports tribute edit celebrating Lionel Messi, beat-synced with impact sound effects and tracking graphics.",
-    software: ["Premiere Pro", "After Effects"],
-    year: "2026",
+    year: "2025",
   },
 ];
 
