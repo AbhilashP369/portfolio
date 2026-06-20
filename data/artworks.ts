@@ -88,15 +88,5 @@ export const artworks = [
     year: "2025",
     description: "A peaceful portrait study showcasing warm skin tones, organic flow, and floating pink lotus blossoms.",
     orientation: "portrait"
-  },
-  {
-    id: 10,
-    image: "/images/art/painting_radha_krishna.jpeg",
-    title: "Radha Krishna Meadow",
-    category: "PAINTINGS",
-    medium: "Acrylic on Canvas",
-    year: "2025",
-    description: "A serene traditional acrylic painting of Radha and Krishna sitting on a lush, flower-rich hillside by a peaceful river.",
-    orientation: "portrait"
   }
 ];
