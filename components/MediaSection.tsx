@@ -99,24 +99,6 @@ const projects: Project[] = [
     year: "2026",
   },
   {
-    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1780726917/anythingf_yygseu.mp4",
-    title: "Anything Film",
-    category: "Short-Form · Creative",
-    description:
-      "A creative short-form film with experimental visuals and unconventional storytelling. Bold cuts and artistic flair.",
-    software: ["Premiere Pro", "After Effects"],
-    year: "2026",
-  },
-  {
-    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1780727036/kandanr_simpl_jc31g1.mp4",
-    title: "Kannur Simple",
-    category: "Cinematic · Short Film",
-    description:
-      "A simple yet cinematic take on the beauty of Kannur. Everyday moments captured with a filmic eye and warm colour palette.",
-    software: ["Premiere Pro", "DaVinci Resolve"],
-    year: "2026",
-  },
-  {
     url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1780727838/starrynight_ddezcz.mp4",
     title: "Starry Night",
     category: "Cinematic · Visual Art",

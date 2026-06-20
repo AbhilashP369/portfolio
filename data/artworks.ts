@@ -48,5 +48,55 @@ export const artworks = [
     year: "2025",
     description: "Promotional flyer for college festival",
     orientation: "portrait"
+  },
+  {
+    id: 6,
+    image: "/images/art/Surreal Cat Portrait.jpeg",
+    title: "Surreal Cat Portrait",
+    category: "PAINTINGS",
+    medium: "Acrylic on Canvas",
+    year: "2025",
+    description: "A surreal, high-contrast portrait blending modern character design with pop art elements.",
+    orientation: "portrait"
+  },
+  {
+    id: 7,
+    image: "/images/art/Uniyarcha.jpeg",
+    title: "Uniyarcha",
+    category: "PAINTINGS",
+    medium: "Acrylic on Canvas",
+    year: "2025",
+    description: "A dynamic traditional depiction of the legendary warrior Uniyarcha, capturing a dramatic action pose with strong light source contrast.",
+    orientation: "portrait"
+  },
+  {
+    id: 8,
+    image: "/images/art/Starry Sunflowers.jpeg",
+    title: "Starry Sunflowers",
+    category: "PAINTINGS",
+    medium: "Acrylic on Canvas",
+    year: "2025",
+    description: "A creative style fusion of Van Gogh's Starry Night aesthetic and modern silhouette art.",
+    orientation: "portrait"
+  },
+  {
+    id: 9,
+    image: "/images/art/Serenity in Lotus.jpeg",
+    title: "Serenity in Lotus",
+    category: "PAINTINGS",
+    medium: "Acrylic on Canvas",
+    year: "2025",
+    description: "A peaceful portrait study showcasing warm skin tones, organic flow, and floating pink lotus blossoms.",
+    orientation: "portrait"
+  },
+  {
+    id: 10,
+    image: "/images/art/painting_radha_krishna.jpeg",
+    title: "Radha Krishna Meadow",
+    category: "PAINTINGS",
+    medium: "Acrylic on Canvas",
+    year: "2025",
+    description: "A serene traditional acrylic painting of Radha and Krishna sitting on a lush, flower-rich hillside by a peaceful river.",
+    orientation: "portrait"
   }
 ];
