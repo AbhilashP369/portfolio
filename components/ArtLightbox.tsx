@@ -1,6 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import SoftwareIcon from "./SoftwareIcon";
 import { ArtItem } from "./ArtCard";
 
@@ -74,8 +75,14 @@ export default function ArtLightbox({ isOpen, onClose, item, slideLeft, slideRig
                   {item.title}
                 </div>
               ) : (
-                /* eslint-disable-next-line @next/next/no-img-element */
-                <img src={item.image} alt={item.title} className="w-full h-full object-contain" />
+                <Image 
+                  src={item.image} 
+                  alt={item.title} 
+                  fill
+                  className="object-contain" 
+                  sizes="90vw"
+                  priority
+                />
               )}
             </div>
             

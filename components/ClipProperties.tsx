@@ -91,6 +91,36 @@ export default function ClipProperties() {
         <div className="flex items-center justify-center p-5 border border-[#222] bg-[#111] hover:bg-[#1a1a1a] transition-colors">
           <span className="font-syne text-[11px] text-[#FF4D00] uppercase tracking-widest text-center">Cinematic +</span>
         </div>
+        <div className="flex items-center justify-center p-5 border border-[#222] bg-[#111] hover:bg-[#1a1a1a] transition-colors">
+          <span className="font-syne text-[11px] text-[#FF4D00] uppercase tracking-widest text-center">Poster Design +</span>
+        </div>
+        <div className="flex items-center justify-center p-5 border border-[#222] bg-[#111] hover:bg-[#1a1a1a] transition-colors">
+          <span className="font-syne text-[11px] text-[#FF4D00] uppercase tracking-widest text-center">Graphics Design +</span>
+        </div>
+        <div className="flex items-center justify-center p-5 border border-[#222] bg-[#111] hover:bg-[#1a1a1a] transition-colors">
+          <span className="font-syne text-[11px] text-[#FF4D00] uppercase tracking-widest text-center">Motion Graphics +</span>
+        </div>
+        <div className="flex items-center justify-center p-5 border border-[#222] bg-[#111] hover:bg-[#1a1a1a] transition-colors">
+          <span className="font-syne text-[11px] text-[#FF4D00] uppercase tracking-widest text-center">Color Grading +</span>
+        </div>
+        <div className="flex items-center justify-center p-5 border border-[#222] bg-[#111] hover:bg-[#1a1a1a] transition-colors">
+          <span className="font-syne text-[11px] text-[#FF4D00] uppercase tracking-widest text-center">VFX / Compositing +</span>
+        </div>
+        <div className="flex items-center justify-center p-5 border border-[#222] bg-[#111] hover:bg-[#1a1a1a] transition-colors">
+          <span className="font-syne text-[11px] text-[#FF4D00] uppercase tracking-widest text-center">Social Media +</span>
+        </div>
+        <div className="flex items-center justify-center p-5 border border-[#222] bg-[#111] hover:bg-[#1a1a1a] transition-colors">
+          <span className="font-syne text-[11px] text-[#FF4D00] uppercase tracking-widest text-center">Music Videos +</span>
+        </div>
+        <div className="flex items-center justify-center p-5 border border-[#222] bg-[#111] hover:bg-[#1a1a1a] transition-colors">
+          <span className="font-syne text-[11px] text-[#FF4D00] uppercase tracking-widest text-center">Corporate Films +</span>
+        </div>
+        <div className="flex items-center justify-center p-5 border border-[#222] bg-[#111] hover:bg-[#1a1a1a] transition-colors">
+          <span className="font-syne text-[11px] text-[#FF4D00] uppercase tracking-widest text-center">Logo Animation +</span>
+        </div>
+        <div className="flex items-center justify-center p-5 border border-[#222] bg-[#111] hover:bg-[#1a1a1a] transition-colors">
+          <span className="font-syne text-[11px] text-[#FF4D00] uppercase tracking-widest text-center">Thumbnail Design +</span>
+        </div>
       </div>
     </div>
   );

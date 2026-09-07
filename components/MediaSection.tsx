@@ -27,20 +27,11 @@ const projects: Project[] = [
     year: "2026",
   },
   {
-    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1781938581/messi_i9czni.mp4",
-    title: "Messi Tribute Edit",
-    category: "Short-Form · Sports",
+    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/f_mp4/v1788783634/notics_zhdi76.mov",
+    title: "Noctics Brand Video",
+    category: "Short-Form · Brand Launch",
     description:
-      "A high-energy sports tribute edit celebrating Lionel Messi, beat-synced with impact sound effects and tracking graphics.",
-    software: ["Premiere Pro", "After Effects"],
-    year: "2026",
-  },
-  {
-    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1781938683/ormakalmotionvideo_dga9yz.mp4",
-    title: "Ormakal Motion Video",
-    category: "Motion Graphics · Cinematic",
-    description:
-      "A nostalgic and cinematic motion video blending storytelling elements, custom typography, and rich sound design.",
+      "Dynamic brand launch edit created for Noctics featuring high-energy cuts, modern typography, and beat-synced motion graphics.",
     software: ["Premiere Pro", "After Effects"],
     year: "2026",
   },
@@ -61,6 +52,24 @@ const projects: Project[] = [
       "Quick-cut flash edit with rapid transitions, beat-synced drops, and high-impact visuals designed to stop the scroll.",
     software: ["Premiere Pro", "After Effects"],
     year: "2025",
+  },
+  {
+    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1781938581/messi_i9czni.mp4",
+    title: "Messi Tribute Edit",
+    category: "Short-Form · Sports",
+    description:
+      "A high-energy sports tribute edit celebrating Lionel Messi, beat-synced with impact sound effects and tracking graphics.",
+    software: ["Premiere Pro", "After Effects"],
+    year: "2026",
+  },
+  {
+    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1781938683/ormakalmotionvideo_dga9yz.mp4",
+    title: "Ormakal Motion Video",
+    category: "Motion Graphics · Cinematic",
+    description:
+      "A nostalgic and cinematic motion video blending storytelling elements, custom typography, and rich sound design.",
+    software: ["Premiere Pro", "After Effects"],
+    year: "2026",
   },
   {
     url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1781939393/IMG_2899_hb1a1z.mp4",

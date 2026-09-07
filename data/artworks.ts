@@ -51,7 +51,7 @@ export const artworks = [
   },
   {
     id: 6,
-    image: "/images/art/Surreal Cat Portrait.jpeg",
+    image: "/images/art/Surreal-Cat-Portrait.jpeg",
     title: "Surreal Cat Portrait",
     category: "PAINTINGS",
     medium: "Acrylic on Canvas",
@@ -71,7 +71,7 @@ export const artworks = [
   },
   {
     id: 8,
-    image: "/images/art/Starry Sunflowers.jpeg",
+    image: "/images/art/Starry-Sunflowers.jpeg",
     title: "Starry Sunflowers",
     category: "PAINTINGS",
     medium: "Acrylic on Canvas",
@@ -81,7 +81,7 @@ export const artworks = [
   },
   {
     id: 9,
-    image: "/images/art/Serenity in Lotus.jpeg",
+    image: "/images/art/Serenity-in-Lotus.jpeg",
     title: "Serenity in Lotus",
     category: "PAINTINGS",
     medium: "Acrylic on Canvas",
