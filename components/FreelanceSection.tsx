@@ -15,6 +15,16 @@ const clients = [
     logo: "/images/clients/Vacmate-Cleaning-Logo-1.svg",
   },
   {
+    name: "MI LIFESTYLE",
+    location: "India",
+    role: "Video Editor & Designer",
+    metric: "Branded Content",
+    tags: ["Promotional Content", "Brand Marketing", "Social Media"],
+    link: "https://www.milifestylemarketing.com/",
+    linkLabel: "Visit Website",
+    logo: "/images/clients/milifestyle-logo.png",
+  },
+  {
     name: "FROZEN FOOD GALAXY",
     location: "Kannur, Kerala",
     role: "Graphic Designer",
