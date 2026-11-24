@@ -50,7 +50,7 @@ export default function ContactSection() {
         // Trigger download
         const a = document.createElement("a");
         a.href = "/abhilash-resume.pdf";
-        a.download = "abhilash-resume.pdf";
+        a.download = "Abhilash_P_Motion_Graphics_Designer_CV.pdf";
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);

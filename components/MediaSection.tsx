@@ -18,15 +18,6 @@ interface Project {
 
 const projects: Project[] = [
   {
-    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1793968190/final_dreamora_pjpjnt.mp4",
-    title: "Dreamora",
-    category: "Brand Video · Commercial",
-    description:
-      "A high-impact cinematic brand edit featuring rhythmic cutting, color grading, and dynamic motion design.",
-    software: ["Premiere Pro", "After Effects"],
-    year: "2026",
-  },
-  {
     url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1780727352/vacmate_p1tbmb.mp4",
     title: "Vacmate Edit",
     category: "Short-Form · Social Media",
@@ -68,6 +59,15 @@ const projects: Project[] = [
     category: "Short-Form · Sports",
     description:
       "A high-energy sports tribute edit celebrating Lionel Messi, beat-synced with impact sound effects and tracking graphics.",
+    software: ["Premiere Pro", "After Effects"],
+    year: "2026",
+  },
+  {
+    url: "https://res.cloudinary.com/dq8z7ztfd/video/upload/v1793968190/final_dreamora_pjpjnt.mp4",
+    title: "Dreamora",
+    category: "Brand Video · Commercial",
+    description:
+      "A high-impact cinematic brand edit featuring rhythmic cutting, color grading, and dynamic motion design.",
     software: ["Premiere Pro", "After Effects"],
     year: "2026",
   },

@@ -3,6 +3,7 @@ import TopMenuBar from "@/components/TopMenuBar";
 import BottomStatusBar from "@/components/BottomStatusBar";
 import SectionDots from "@/components/SectionDots";
 import HeroSection from "@/components/HeroSection";
+import IntroVideoSection from "@/components/IntroVideoSection";
 
 import MediaSection from "@/components/MediaSection";
 import BeforeAfterSection from "@/components/BeforeAfterSection";
@@ -25,6 +26,14 @@ export default function Home() {
       <div className="flex-1 w-full max-w-[1920px] mx-auto flex flex-col">
         <HeroSection />
         
+        <div className="w-full h-px bg-border my-4 relative">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-deep px-2 text-[10px] font-mono text-muted">
+            --- CUT ---
+          </div>
+        </div>
+
+        <IntroVideoSection />
+
         <div className="w-full h-px bg-border my-4 relative">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-deep px-2 text-[10px] font-mono text-muted">
             --- CUT ---
