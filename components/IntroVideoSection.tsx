@@ -194,43 +194,59 @@ export default function IntroVideoSection({
     }
   };
 
-  // Toggle Fullscreen
+  // Toggle Fullscreen — handles desktop (div fullscreen) and iOS Safari (video webkitEnterFullscreen)
   const toggleFullscreen = useCallback(() => {
-    if (!playerContainerRef.current) return;
-    const doc = document as unknown as {
+    // Type helpers
+    type DocFs = {
       fullscreenElement?: Element;
       webkitFullscreenElement?: Element;
       exitFullscreen?: () => Promise<void>;
-      webkitExitFullscreen?: () => Promise<void>;
+      webkitExitFullscreen?: () => void;
     };
+    type ElemFs = {
+      requestFullscreen?: () => Promise<void>;
+      webkitRequestFullscreen?: () => void;
+      focus?: () => void;
+    };
+    type VideoIOS = HTMLVideoElement & {
+      webkitEnterFullscreen?: () => void;
+      webkitExitFullscreen?: () => void;
+      webkitDisplayingFullscreen?: boolean;
+    };
+
+    const doc = document as unknown as DocFs;
     const isFs = !!(doc.fullscreenElement || doc.webkitFullscreenElement);
 
     if (!isFs) {
-      const elem = playerContainerRef.current as unknown as {
-        requestFullscreen?: () => Promise<void>;
-        webkitRequestFullscreen?: () => Promise<void>;
-        focus?: () => void;
-      };
-      if (elem.requestFullscreen) {
-        elem
-          .requestFullscreen()
-          .then(() => {
-            elem.focus?.();
-          })
-          .catch(() => {});
-      } else if (elem.webkitRequestFullscreen) {
-        elem.webkitRequestFullscreen();
-        elem.focus?.();
+      // Try div-level fullscreen (desktop + Android Chrome)
+      const container = playerContainerRef.current as unknown as ElemFs | null;
+      if (container?.requestFullscreen) {
+        container.requestFullscreen().then(() => container.focus?.()).catch(() => {});
+        return;
+      }
+      if (container?.webkitRequestFullscreen) {
+        container.webkitRequestFullscreen();
+        container.focus?.();
+        return;
+      }
+      // iOS Safari fallback: fullscreen the <video> element directly
+      const vid = videoRef.current as VideoIOS | null;
+      if (vid?.webkitEnterFullscreen) {
+        // Must be playing or paused — iOS requires a user gesture
+        vid.webkitEnterFullscreen();
+        setIsFullscreen(true);
+        return;
       }
     } else {
       if (doc.exitFullscreen) {
         doc.exitFullscreen().catch(() => {});
       } else if (doc.webkitExitFullscreen) {
-        doc.webkitExitFullscreen().catch(() => {});
+        doc.webkitExitFullscreen();
       }
     }
   }, []);
 
+  // Fullscreen change listeners (desktop + Android + iOS video events)
   useEffect(() => {
     const handleFsChange = () => {
       const isFs = !!(
@@ -245,15 +261,37 @@ export default function IntroVideoSection({
         playerContainerRef.current.focus();
       }
     };
+
+    // iOS: listen on the <video> element for webkit fullscreen events
+    const handleIosBeginFs = () => {
+      setIsFullscreen(true);
+      setShowCenterIcon(true);
+    };
+    const handleIosEndFs = () => {
+      setIsFullscreen(false);
+      setShowCenterIcon(true);
+    };
+
     document.addEventListener("fullscreenchange", handleFsChange);
     document.addEventListener("webkitfullscreenchange", handleFsChange);
     document.addEventListener("mozfullscreenchange", handleFsChange);
     document.addEventListener("MSFullscreenChange", handleFsChange);
+
+    const vid = videoRef.current;
+    if (vid) {
+      vid.addEventListener("webkitbeginfullscreen", handleIosBeginFs);
+      vid.addEventListener("webkitendfullscreen", handleIosEndFs);
+    }
+
     return () => {
       document.removeEventListener("fullscreenchange", handleFsChange);
       document.removeEventListener("webkitfullscreenchange", handleFsChange);
       document.removeEventListener("mozfullscreenchange", handleFsChange);
       document.removeEventListener("MSFullscreenChange", handleFsChange);
+      if (vid) {
+        vid.removeEventListener("webkitbeginfullscreen", handleIosBeginFs);
+        vid.removeEventListener("webkitendfullscreen", handleIosEndFs);
+      }
     };
   }, []);
 
@@ -338,6 +376,10 @@ export default function IntroVideoSection({
           isInteractingRef.current = true;
           handleFsMouseActivity();
         }}
+        onTouchStart={() => {
+          isInteractingRef.current = true;
+          handleFsMouseActivity();
+        }}
         onMouseEnter={() => {
           isInteractingRef.current = true;
         }}
@@ -411,18 +453,24 @@ export default function IntroVideoSection({
         >
           {/* Video Screen Area */}
           <div
-            className={`relative flex-1 bg-black flex items-center justify-center cursor-pointer overflow-hidden ${
+            className={`relative flex-1 bg-black flex items-center justify-center overflow-hidden ${
               isFullscreen ? "h-full w-full" : "aspect-video"
             }`}
             onClick={togglePlay}
             onMouseMove={handleCanvasMouseMove}
             onMouseLeave={handleCanvasMouseLeave}
+            onTouchEnd={(e) => {
+              e.preventDefault();
+              togglePlay();
+            }}
           >
             <video
               ref={videoRef}
               src={videoUrl}
               poster={posterUrl}
               playsInline
+              // @ts-expect-error webkit-playsinline is non-standard iOS attr
+              webkitPlaysInline="true"
               muted={isMuted}
               preload="metadata"
               onClick={(e) => {
